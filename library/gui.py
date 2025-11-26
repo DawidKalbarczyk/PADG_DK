@@ -1,10 +1,9 @@
 import tkinter as tk
-
 def graphicUserInterface():
     root = tk.Tk()
     root.geometry('1025x600')
     root.title("System do zarządzania sklepami i pracownikami w mieście")
-    root.config(bg="gray")
+    root.iconbitmap('assets/icons/app-icon.ico')
 
     root.columnconfigure(0, weight=1)
     root.columnconfigure(1, weight=3)
@@ -25,27 +24,99 @@ def graphicUserInterface():
     titleFrame.columnconfigure(0, weight=1)
     titleFrame.columnconfigure(1, weight=1)
     titleFrame.columnconfigure(2, weight=1)
+    titleFrame.columnconfigure(3, weight=1)
 
     titleLabel = (tk.Label(titleFrame, text="Narzędzia",
-                           font=("Roboto", 10, "bold"), bg="yellow"))
+                           font=("Roboto", 12, "bold")))
     titleLabel.grid(row=0, column=0, pady=2, ipady=4, ipadx=4, sticky="nsew", columnspan=3)
 
-    mainFrame = (tk.Frame(root, bg="gray"))
+    imageTools = tk.PhotoImage(file="assets/icons/tools.png")
+    imageTools = imageTools.subsample(17, 17)
+    imageToolsLabel = tk.Label(titleFrame, image=imageTools)
+    imageToolsLabel.grid(row=0, column=3)
+
+    mainFrame = (tk.Frame(root))
     mainFrame.grid(row=1, column=0, sticky="nsew")
     mainFrame.columnconfigure(0, weight=1)
     mainFrame.rowconfigure(0, weight=1)
     mainFrame.rowconfigure(1, weight=1)
     mainFrame.rowconfigure(2, weight=1)
 
-    objectsFrame = tk.Frame(mainFrame, bg="blue", borderwidth=1, relief="solid")
+
+
+
+    objectsFrame = tk.Frame(mainFrame, borderwidth=1, relief="solid")
     objectsFrame.grid(row=0, column=0, sticky="nsew")
-    objectsLabel = tk.Label(objectsFrame, text="objLabel")  #######
-    objectsLabel.pack()  # ######
+    objectsFrame.columnconfigure(0, weight=1)
+    objectsFrame.rowconfigure(0, weight=1)
+    objectsFrame.rowconfigure(1, weight=9)
+    objectsLabel = tk.Label(objectsFrame, text="Lista obiektów")  #######
+    objectsLabel.grid(row=0, column=0) # ######
+    objectsList = tk.Listbox(objectsFrame, borderwidth=3, relief="groove")
+    objectsList.grid(row=1, column=0, sticky="new", padx=10, pady=10)
+
+
+
 
     formFrame = tk.Frame(mainFrame, bg="red", borderwidth=1, relief="solid")
     formFrame.grid(row=1, column=0, sticky="nsew")
-    formLabel = tk.Label(formFrame, text="formLabel")  ########
-    formLabel.pack()  ######
+    formFrame.columnconfigure(0, weight=1)
+    formFrame.columnconfigure(1, weight=1)
+    formFrame.columnconfigure(2, weight=1)
+    formFrame.rowconfigure(0, weight=1)
+    formFrame.rowconfigure(1, weight=9)
+
+    formTitleFrame = tk.Frame(formFrame)
+    formTitleFrame.grid(row=0, column=0, sticky="nsew", columnspan=3)
+    formTitleFrame.columnconfigure(0, weight=1)
+    formTitleFrame.columnconfigure(1, weight=1)
+    formTitleFrame.columnconfigure(2, weight=1)
+    formLabel = tk.Label(formFrame, text="Formularz")  ########
+    formLabel.grid(row=0, column=1)
+
+
+    formEntryFrame = tk.Frame(formFrame)
+    formEntryFrame.grid(row=1, column=0, sticky="nsew", columnspan=3)
+    formEntryFrame.columnconfigure(0, weight=1)
+    formEntryFrame.columnconfigure(1, weight=3)
+    formEntryFrame.rowconfigure(0, weight=1)
+    formEntryFrame.rowconfigure(1, weight=1)
+    formEntryFrame.rowconfigure(2, weight=1)
+    formEntryFrame.rowconfigure(3, weight=1)
+
+    formEntryName = tk.Label(formEntryFrame, text="Imię: ")
+    formEntryName.grid(row=0, column=0)
+    formEntryNameValue = tk.Entry(formEntryFrame)
+    formEntryNameValue.grid(row=0, column=1, sticky="ew", padx=(0,20))
+
+    formEntryName = tk.Label(formEntryFrame, text="Lokalizacja: ")
+    formEntryName.grid(row=1, column=0)
+    formEntryNameValue = tk.Entry(formEntryFrame)
+    formEntryNameValue.grid(row=1, column=1, sticky="ew", padx=(0,20))
+
+    formEntryPosts = tk.Label(formEntryFrame, text="Posts: ")
+    formEntryPosts.grid(row=2, column=0)
+    formEntryPostsValue = tk.Entry(formEntryFrame)
+    formEntryPostsValue.grid(row=2, column=1, sticky="ew", padx=(0,20))
+
+    formEntryIMG = tk.Label(formEntryFrame, text="IMG: ")
+    formEntryIMG.grid(row=3, column=0)
+    formEntryIMGValue = tk.Entry(formEntryFrame)
+    formEntryIMGValue.grid(row=3, column=1, sticky="ew", padx=(0,20))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     objectDescriptionFrame = tk.Frame(mainFrame, bg="green", borderwidth=1, relief="solid")
     objectDescriptionFrame.grid(row=2, column=0, sticky="nsew")
@@ -62,14 +133,20 @@ def graphicUserInterface():
     rightFrame.columnconfigure(1, weight=1)
     rightFrame.columnconfigure(2, weight=1)
 
-    mapTitleFrame = tk.Frame(rightFrame, bg="red", borderwidth=1, relief="solid")
+    mapTitleFrame = tk.Frame(rightFrame, borderwidth=1, relief="solid")
     mapTitleFrame.grid(row=0, column=1, sticky="nsew", columnspan=3)
     mapTitleFrame.columnconfigure(0, weight=1)
     mapTitleFrame.columnconfigure(1, weight=1)
     mapTitleFrame.columnconfigure(2, weight=1)
+    mapTitleFrame.columnconfigure(3, weight=1)
 
-    mapTitleLabel = tk.Label(mapTitleFrame, text="Wygenerowanadwdwawa Mapa", font=("Roboto", 10, "bold"))
-    mapTitleLabel.grid(row=0, column=1, pady=2, ipady=4, ipadx=4)
+    mapTitleLabel = tk.Label(mapTitleFrame, text="Wygenerowana Mapa", font=("Roboto", 12, "bold"))
+    mapTitleLabel.grid(row=0, column=0, pady=2, ipady=4, ipadx=4, columnspan=3)
+
+    imageMap = tk.PhotoImage(file="assets/icons/map.png")
+    imageMap = imageMap.subsample(17, 17)
+    imageMapLabel = tk.Label(mapTitleFrame, image=imageMap)
+    imageMapLabel.grid(row=0, column=3)
 
 
     mapFrame = tk.Frame(rightFrame, bg="yellow", borderwidth=1, relief="solid")
