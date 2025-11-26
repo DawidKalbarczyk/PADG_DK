@@ -4,14 +4,16 @@ def graphicUserInterface():
     root.geometry('1025x600')
     root.title("System do zarządzania sklepami i pracownikami w mieście")
     root.iconbitmap('assets/icons/app-icon.ico')
-
     root.columnconfigure(0, weight=1)
-    root.columnconfigure(1, weight=3)
+    root.columnconfigure(1, weight=1)
+    root.columnconfigure(2, weight=1)
+    root.columnconfigure(3, weight=1)
+
     # root.rowconfigure(0, weight=1)
     root.rowconfigure(1, weight=1)
 
-    leftFrame = tk.Frame(root)
-    leftFrame.grid(row=0, column=0, sticky="nsew")
+    leftFrame = tk.Frame(root, borderwidth=1, relief="solid")
+    leftFrame.grid(row=0, column=0, sticky="nsew", ipadx=10, pady=(0,15))
     # leftFrame.columnconfigure(0, weight=1)
     leftFrame.rowconfigure(1, weight=1)
     leftFrame.columnconfigure(0, weight=1)
@@ -19,8 +21,8 @@ def graphicUserInterface():
     leftFrame.columnconfigure(2, weight=1)
 
 
-    titleFrame = tk.Frame(leftFrame, borderwidth=1, relief="solid")
-    titleFrame.grid(row=0, column=0, sticky="ew", columnspan=3)
+    titleFrame = tk.Frame(leftFrame)
+    titleFrame.grid(row=0, column=0, sticky="ew", columnspan=3, padx=(2,3))
     titleFrame.columnconfigure(0, weight=1)
     titleFrame.columnconfigure(1, weight=1)
     titleFrame.columnconfigure(2, weight=1)
@@ -45,12 +47,12 @@ def graphicUserInterface():
 
 
 
-    objectsFrame = tk.Frame(mainFrame, borderwidth=1, relief="solid")
-    objectsFrame.grid(row=0, column=0, sticky="nsew")
+    objectsFrame = tk.Frame(mainFrame)
+    objectsFrame.grid(row=0, column=0, sticky="new")
     objectsFrame.columnconfigure(0, weight=1)
     objectsFrame.rowconfigure(0, weight=1)
     objectsFrame.rowconfigure(1, weight=9)
-    objectsLabel = tk.Label(objectsFrame, text="Lista obiektów")  #######
+    objectsLabel = tk.Label(objectsFrame, text="Lista obiektów", font=("Roboto", 10, "bold"))  #######
     objectsLabel.grid(row=0, column=0) # ######
     objectsList = tk.Listbox(objectsFrame, borderwidth=3, relief="groove")
     objectsList.grid(row=1, column=0, sticky="new", padx=10, pady=10)
@@ -58,8 +60,8 @@ def graphicUserInterface():
 
 
 
-    formFrame = tk.Frame(mainFrame, bg="red", borderwidth=1, relief="solid")
-    formFrame.grid(row=1, column=0, sticky="nsew")
+    formFrame = tk.Frame(mainFrame, borderwidth=1, relief="solid")
+    formFrame.grid(row=1, column=0, sticky="nsew", padx=(0,0))
     formFrame.columnconfigure(0, weight=1)
     formFrame.columnconfigure(1, weight=1)
     formFrame.columnconfigure(2, weight=1)
@@ -71,7 +73,7 @@ def graphicUserInterface():
     formTitleFrame.columnconfigure(0, weight=1)
     formTitleFrame.columnconfigure(1, weight=1)
     formTitleFrame.columnconfigure(2, weight=1)
-    formLabel = tk.Label(formFrame, text="Formularz")  ########
+    formLabel = tk.Label(formFrame, text="Formularz", font=("Roboto", 10, "bold"))  ########
     formLabel.grid(row=0, column=1)
 
 
@@ -99,7 +101,7 @@ def graphicUserInterface():
     formEntryPostsValue = tk.Entry(formEntryFrame)
     formEntryPostsValue.grid(row=2, column=1, sticky="ew", padx=(0,20))
 
-    formEntryIMG = tk.Label(formEntryFrame, text="IMG: ")
+    formEntryIMG = tk.Label(formEntryFrame, text="Image Source: ")
     formEntryIMG.grid(row=3, column=0)
     formEntryIMGValue = tk.Entry(formEntryFrame)
     formEntryIMGValue.grid(row=3, column=1, sticky="ew", padx=(0,20))
@@ -118,22 +120,42 @@ def graphicUserInterface():
 
 
 
-    objectDescriptionFrame = tk.Frame(mainFrame, bg="green", borderwidth=1, relief="solid")
+    objectDescriptionFrame = tk.Frame(mainFrame)
     objectDescriptionFrame.grid(row=2, column=0, sticky="nsew")
-    objectDescriptionLabel = tk.Label(objectDescriptionFrame, text="objDescriptionLabel")  #######
-    objectDescriptionLabel.pack()  ######
+    objectDescriptionFrame.columnconfigure(0, weight=1)
+    objectDescriptionFrame.columnconfigure(1, weight=1)
+    objectDescriptionFrame.rowconfigure(1, weight=1)
+    objectDescriptionFrame.rowconfigure(2, weight=1)
+    objectDescriptionFrame.rowconfigure(3, weight=1)
+    objectDescriptionFrame.rowconfigure(4, weight=1)
+    objectDescriptionLabel = tk.Label(objectDescriptionFrame, text="Szczegóły obiektu", font=("Roboto", 10, "bold"))  #######
+    objectDescriptionLabel.grid(row=0, column=0, columnspan=2)  ######
+    descriptionName = tk.Label(objectDescriptionFrame, text="Imię: ")
+    descriptionName.grid(row=1, column=0, sticky="nsew")
+    descriptionNameValue = tk.Entry(objectDescriptionFrame)
+    descriptionNameValue.grid(row=1, column=1, sticky="ew", padx=(0,20))
+    descriptionLocation = tk.Label(objectDescriptionFrame, text="Pozycja obiektu: ")
+    descriptionLocation.grid(row=2, column=0, sticky="nsew")
+    descriptionLocationValue = tk.Entry(objectDescriptionFrame)
+    descriptionLocationValue.grid(row=2, column=1, sticky="ew", padx=(0,20))
+    descriptionPosts = tk.Label(objectDescriptionFrame, text="Posts: ")
+    descriptionPosts.grid(row=3, column=0, sticky="nsew")
+    descriptionPostsValue = tk.Entry(objectDescriptionFrame)
+    descriptionPostsValue.grid(row=3, column=1, sticky="ew", padx=(0,20))
+    descriptionIMG = tk.Label(objectDescriptionFrame, text="Image Source: ")
+    descriptionIMG.grid(row=4, column=0, sticky="nsew")
+    descriptionIMGValue = tk.Entry(objectDescriptionFrame)
+    descriptionIMGValue.grid(row=4, column=1, sticky="ew", padx=(0,20))
 
 
-
-
-    rightFrame = tk.Frame(root, borderwidth=1, relief="solid")
+    rightFrame = tk.Frame(root, borderwidth=1, relief="solid", )
     rightFrame.grid(row=0, column=1, sticky="nsew", rowspan=2, columnspan=3)
     rightFrame.columnconfigure(0, weight=0)
     rightFrame.rowconfigure(1, weight=1)
     rightFrame.columnconfigure(1, weight=1)
     rightFrame.columnconfigure(2, weight=1)
 
-    mapTitleFrame = tk.Frame(rightFrame, borderwidth=1, relief="solid")
+    mapTitleFrame = tk.Frame(rightFrame)
     mapTitleFrame.grid(row=0, column=1, sticky="nsew", columnspan=3)
     mapTitleFrame.columnconfigure(0, weight=1)
     mapTitleFrame.columnconfigure(1, weight=1)
@@ -150,7 +172,7 @@ def graphicUserInterface():
 
 
     mapFrame = tk.Frame(rightFrame, bg="yellow", borderwidth=1, relief="solid")
-    mapFrame.grid(row=1, column=1, sticky="nsew", columnspan=3)
+    mapFrame.grid(row=1, column=1, sticky="nsew", columnspan=3, pady=(1,0))
 
     mapLabel = tk.Label(mapFrame, text="mapLabel")  #####
     mapLabel.pack()  #######
