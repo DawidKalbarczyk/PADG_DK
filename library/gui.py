@@ -2,16 +2,18 @@ import tkinter as tk
 from library.additionalFiles.windowPosition import windowPos
 from library.additionalFiles.closeWholeProgram import closeProgram
 def graphicUserInterface(appRoot):
+    table = "employeesInStore"
+
     appRoot.withdraw()
     root = tk.Toplevel(appRoot)
-    windowPos(root=root, windowWidth=1025, windowHeight=600)
+    windowPos(root=root, windowWidth=1025, windowHeight=700)
     root.title("System do zarzadzania sklepami i pracownikami w miescie")
     root.iconbitmap('assets/icons/app-icon.ico')
     root.protocol("WM_DELETE_WINDOW", lambda: closeProgram(root, appRoot))
     root.columnconfigure(0, weight=1)
-    root.columnconfigure(1, weight=1)
-    root.columnconfigure(2, weight=1)
-    root.columnconfigure(3, weight=1)
+    root.columnconfigure(1, weight=2)
+    root.columnconfigure(2, weight=2)
+    root.columnconfigure(3, weight=2)
 
     # root.rowconfigure(0, weight=1)
     root.rowconfigure(1, weight=1)
@@ -39,7 +41,9 @@ def graphicUserInterface(appRoot):
     imageTools = tk.PhotoImage(file="assets/icons/tools.png")
     imageTools = imageTools.subsample(17, 17)
     imageToolsLabel = tk.Label(titleFrame, image=imageTools)
+    imageToolsLabel.image = imageTools
     imageToolsLabel.grid(row=0, column=3)
+
 
     mainFrame = (tk.Frame(root))
     mainFrame.grid(row=1, column=0, sticky="nsew")
@@ -67,13 +71,24 @@ def graphicUserInterface(appRoot):
     objectsButtonsFrame.columnconfigure(0, weight=1)
     objectsButtonsFrame.columnconfigure(1, weight=1)
     objectsButtonsFrame.columnconfigure(2, weight=1)
+    objectsButtonsFrame.columnconfigure(3, weight=1)
 
     objectsStoreListButton = tk.Button(objectsButtonsFrame, text = "Sklepy")
-    objectsStoreListButton.grid(row=0, column=0, sticky="ew")
+    objectsStoreListButton.grid(row=0, column=0, sticky="ew", )
+
     objectsEmployeeButton = tk.Button(objectsButtonsFrame, text = "Pracownicy")
-    objectsEmployeeButton.grid(row=0, column=1, sticky="ew")
+    objectsEmployeeButton.grid(row=0, column=1, sticky="ew",padx=5)
+
+    objectsDeliveriesButton = tk.Button(objectsButtonsFrame, text = "Dostawy")
+    objectsDeliveriesButton.grid(row=0, column=2, sticky="ew")
+
+    objectsDeliveryMen = tk.Button(objectsButtonsFrame, text = "Dostawcy")
+    objectsDeliveryMen.grid(row=0, column=3, sticky="ew", padx=(5,0))
+
     objectsList = tk.Listbox(objectsFrame, borderwidth=3, relief="groove")
     objectsList.grid(row=2, column=0, sticky="new", padx=10, pady=10)
+
+
 
 
     from library.additionalFiles.newWindow import newWindow
@@ -85,13 +100,13 @@ def graphicUserInterface(appRoot):
     objectsCommandButtonsFrame.columnconfigure(2, weight=1)
 
 
-    objectsCommandAddButton = tk.Button(objectsCommandButtonsFrame, text = "Dodaj rekord", command = lambda: newWindow("add", objectsFrame))
+    objectsCommandAddButton = tk.Button(objectsCommandButtonsFrame, text = "Dodaj rekord", command = lambda: newWindow("add", objectsFrame, table))
     objectsCommandAddButton.grid(row=0, column=0, sticky="ew")
 
     objectsCommandEditButton = tk.Button(objectsCommandButtonsFrame, text = "Edytuj rekord", command = lambda: newWindow("edit", objectsFrame))
-    objectsCommandEditButton.grid(row=0, column=1, sticky="ew")
+    objectsCommandEditButton.grid(row=0, column=1, sticky="ew", padx=5)
 
-    objectsCommandDeleteButton = tk.Button(objectsCommandButtonsFrame, text = "UsuÅ„ rekord")#, command = lambda: deleteRecord())
+    objectsCommandDeleteButton = tk.Button(objectsCommandButtonsFrame, text = "Usun„ rekord")#, command = lambda: deleteRecord())
     objectsCommandDeleteButton.grid(row=0, column=2, sticky="ew")
 
     objectsShowAllButton = tk.Button(objectsFrame, text = "PokaÅ¼ szczegÃ³Å‚y")
@@ -117,6 +132,7 @@ def graphicUserInterface(appRoot):
     imageMap = tk.PhotoImage(file="assets/icons/map.png")
     imageMap = imageMap.subsample(17, 17)
     imageMapLabel = tk.Label(mapTitleFrame, image=imageMap)
+    imageMapLabel.image = imageMap
     imageMapLabel.grid(row=0, column=3)
 
     mapFrame = tk.Frame(rightFrame, bg="yellow", borderwidth=1, relief="solid")
