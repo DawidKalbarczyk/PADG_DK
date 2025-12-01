@@ -51,15 +51,80 @@ def graphicUserInterface():
     objectsFrame.grid(row=0, column=0, sticky="new")
     objectsFrame.columnconfigure(0, weight=1)
     objectsFrame.rowconfigure(0, weight=1)
-    objectsFrame.rowconfigure(1, weight=9)
+    objectsFrame.rowconfigure(1, weight=1)
+    objectsFrame.rowconfigure(2, weight=9)
+    objectsFrame.rowconfigure(3, weight=1)
+    objectsFrame.rowconfigure(4, weight=1)
     objectsLabel = tk.Label(objectsFrame, text="Lista obiektów", font=("Roboto", 10, "bold"))  #######
     objectsLabel.grid(row=0, column=0) # ######
+
+    objectsButtonsFrame = tk.Frame(objectsFrame)
+    objectsButtonsFrame.grid(row=1, column=0, sticky="nsew", padx=10, pady=10)
+    objectsButtonsFrame.columnconfigure(0, weight=1)
+    objectsButtonsFrame.columnconfigure(1, weight=1)
+    objectsButtonsFrame.columnconfigure(2, weight=1)
+
+    objectsStoreListButton = tk.Button(objectsButtonsFrame, text = "Sklepy")
+    objectsStoreListButton.grid(row=0, column=0, sticky="ew")
+    objectsEmployeeButton = tk.Button(objectsButtonsFrame, text = "Pracownicy")
+    objectsEmployeeButton.grid(row=0, column=1, sticky="ew")
     objectsList = tk.Listbox(objectsFrame, borderwidth=3, relief="groove")
-    objectsList.grid(row=1, column=0, sticky="new", padx=10, pady=10)
+    objectsList.grid(row=2, column=0, sticky="new", padx=10, pady=10)
 
 
+    from library.newWindow import newWindow
+
+    objectsCommandButtonsFrame = tk.Frame(objectsFrame)
+    objectsCommandButtonsFrame.grid(row=3, column=0, sticky="nsew", padx=10, pady=10)
+    objectsCommandButtonsFrame.columnconfigure(0, weight=1)
+    objectsCommandButtonsFrame.columnconfigure(1, weight=1)
+    objectsCommandButtonsFrame.columnconfigure(2, weight=1)
 
 
+    objectsCommandAddButton = tk.Button(objectsCommandButtonsFrame, text = "Dodaj rekord", command = lambda: newWindow("add", objectsFrame))
+    objectsCommandAddButton.grid(row=0, column=0, sticky="ew")
+
+    objectsCommandEditButton = tk.Button(objectsCommandButtonsFrame, text = "Edytuj rekord", command = lambda: newWindow("edit", objectsFrame))
+    objectsCommandEditButton.grid(row=0, column=1, sticky="ew")
+
+    objectsCommandDeleteButton = tk.Button(objectsCommandButtonsFrame, text = "Usuń rekord", command = lambda: deleteRecord())
+    objectsCommandDeleteButton.grid(row=0, column=2, sticky="ew")
+
+    objectsShowAllButton = tk.Button(objectsFrame, text = "Pokaż szczegóły")
+    objectsShowAllButton.grid(row=4, column=0, sticky="nsew", padx=10, pady=10)
+
+    rightFrame = tk.Frame(root, borderwidth=1, relief="solid", )
+    rightFrame.grid(row=0, column=1, sticky="nsew", rowspan=2, columnspan=3)
+    rightFrame.columnconfigure(0, weight=0)
+    rightFrame.rowconfigure(1, weight=1)
+    rightFrame.columnconfigure(1, weight=1)
+    rightFrame.columnconfigure(2, weight=1)
+
+    mapTitleFrame = tk.Frame(rightFrame)
+    mapTitleFrame.grid(row=0, column=1, sticky="nsew", columnspan=3)
+    mapTitleFrame.columnconfigure(0, weight=1)
+    mapTitleFrame.columnconfigure(1, weight=1)
+    mapTitleFrame.columnconfigure(2, weight=1)
+    mapTitleFrame.columnconfigure(3, weight=1)
+
+    mapTitleLabel = tk.Label(mapTitleFrame, text="Wygenerowana Mapa", font=("Roboto", 12, "bold"))
+    mapTitleLabel.grid(row=0, column=0, pady=2, ipady=4, ipadx=4, columnspan=3)
+
+    imageMap = tk.PhotoImage(file="assets/icons/map.png")
+    imageMap = imageMap.subsample(17, 17)
+    imageMapLabel = tk.Label(mapTitleFrame, image=imageMap)
+    imageMapLabel.grid(row=0, column=3)
+
+    mapFrame = tk.Frame(rightFrame, bg="yellow", borderwidth=1, relief="solid")
+    mapFrame.grid(row=1, column=1, sticky="nsew", columnspan=3, pady=(1, 0))
+
+    mapLabel = tk.Label(mapFrame, text="mapLabel")  #####
+    mapLabel.pack()  #######
+
+    root.mainloop()
+
+
+"""
     formFrame = tk.Frame(mainFrame, borderwidth=1, relief="solid")
     formFrame.grid(row=1, column=0, sticky="nsew", padx=(0,0))
     formFrame.columnconfigure(0, weight=1)
@@ -147,35 +212,6 @@ def graphicUserInterface():
     descriptionIMGValue = tk.Entry(objectDescriptionFrame)
     descriptionIMGValue.grid(row=4, column=1, sticky="ew", padx=(0,20))
 
+"""
 
-    rightFrame = tk.Frame(root, borderwidth=1, relief="solid", )
-    rightFrame.grid(row=0, column=1, sticky="nsew", rowspan=2, columnspan=3)
-    rightFrame.columnconfigure(0, weight=0)
-    rightFrame.rowconfigure(1, weight=1)
-    rightFrame.columnconfigure(1, weight=1)
-    rightFrame.columnconfigure(2, weight=1)
-
-    mapTitleFrame = tk.Frame(rightFrame)
-    mapTitleFrame.grid(row=0, column=1, sticky="nsew", columnspan=3)
-    mapTitleFrame.columnconfigure(0, weight=1)
-    mapTitleFrame.columnconfigure(1, weight=1)
-    mapTitleFrame.columnconfigure(2, weight=1)
-    mapTitleFrame.columnconfigure(3, weight=1)
-
-    mapTitleLabel = tk.Label(mapTitleFrame, text="Wygenerowana Mapa", font=("Roboto", 12, "bold"))
-    mapTitleLabel.grid(row=0, column=0, pady=2, ipady=4, ipadx=4, columnspan=3)
-
-    imageMap = tk.PhotoImage(file="assets/icons/map.png")
-    imageMap = imageMap.subsample(17, 17)
-    imageMapLabel = tk.Label(mapTitleFrame, image=imageMap)
-    imageMapLabel.grid(row=0, column=3)
-
-
-    mapFrame = tk.Frame(rightFrame, bg="yellow", borderwidth=1, relief="solid")
-    mapFrame.grid(row=1, column=1, sticky="nsew", columnspan=3, pady=(1,0))
-
-    mapLabel = tk.Label(mapFrame, text="mapLabel")  #####
-    mapLabel.pack()  #######
-
-    root.mainloop()
 
