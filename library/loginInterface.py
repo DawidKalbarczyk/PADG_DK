@@ -1,11 +1,14 @@
 import tkinter as tk
 from library.additionalFiles.windowPosition import windowPos
+from library.additionalFiles.closeWholeProgram import closeProgram
 allowedToLogin = False
 def login(appRoot):
-    root = appRoot
-    windowPos(root=appRoot, windowWidth=400, windowHeight=200)
+    appRoot.withdraw()
+    root = tk.Toplevel(appRoot)
+    windowPos(root=root, windowWidth=400, windowHeight=200)
     root.title("Okno logowania")
     root.iconbitmap("assets/icons/key.ico")
+    root.protocol("WM_DELETE_WINDOW", lambda: closeProgram(root, appRoot))
     root.columnconfigure(0, weight=1)
     root.columnconfigure(1, weight=1)
     root.columnconfigure(2, weight=1)
@@ -50,12 +53,10 @@ def login(appRoot):
     loginButtonsAccept = tk.Button(loginButtonsFrame, text="Logowanie", command=lambda: get_values(loginValuesLoginValue, loginValuesPasswordValue, root))
     loginButtonsAccept.grid(row=0, column=0, padx=10, pady=10)
 
-    loginButtonsDeny = tk.Button(loginButtonsFrame, text="WyjdÅº", command=root.destroy)
+    loginButtonsDeny = tk.Button(loginButtonsFrame, text="WyjdÅº", command=appRoot.destroy)
     loginButtonsDeny.grid(row=0, column=1, padx=10, pady=10)
-
-
-    root.mainloop()
-    print(allowedToLogin)
+    appRoot.wait_window(root)  # czeka az zamknie okno
+    return allowedToLogin
 
 def get_values(loginEntry, passwordEntry, root):
     global allowedToLogin
@@ -67,14 +68,9 @@ def get_values(loginEntry, passwordEntry, root):
     SQL = f'SELECT id, password FROM "employeesInStore" WHERE id = {loginValue}'
     cursor = dbConnect().cursor()
     cursor.execute(SQL)
-    dataLogin, dataPassword = cursor.fetchone()
-    print(dataLogin)
-    print(dataPassword)
+    result = cursor.fetchone()
 
-    if int(loginValue) == dataLogin and passwordValue == dataPassword:
-        allowedToLogin = True
-        root.destroy()
-    else:
+    if result is None:
         alert = tk.Toplevel(root)
         windowPos(root=alert, windowWidth=350, windowHeight=100)
         alert.title("Error")
@@ -90,4 +86,26 @@ def get_values(loginEntry, passwordEntry, root):
 
         alertButton = tk.Button(alert, text="Zamknij", command=alert.destroy)
         alertButton.grid(row=1, column=1, padx=10, pady=10)
+    else:
+        dataLogin, dataPassword = result
+        if int(loginValue) == dataLogin and passwordValue == dataPassword:
+            allowedToLogin = True
+            root.destroy()
+
+        else:
+            alert = tk.Toplevel(root)
+            windowPos(root=alert, windowWidth=350, windowHeight=100)
+            alert.title("Error")
+            alert.iconbitmap("assets/icons/error-icon-4.ico")
+            alert.columnconfigure(0, weight=1)
+            alert.columnconfigure(1, weight=1)
+            alert.columnconfigure(2, weight=1)
+            alert.rowconfigure(0, weight=1)
+            alert.rowconfigure(1, weight=1)
+
+            alertText = tk.Label(alert, text="Wprowadzono bledne dane logowania!")
+            alertText.grid(row=0, column=1, padx=10, pady=10)
+
+            alertButton = tk.Button(alert, text="Zamknij", command=alert.destroy)
+            alertButton.grid(row=1, column=1, padx=10, pady=10)
 
