@@ -1,10 +1,13 @@
 import tkinter as tk
 from library.additionalFiles.windowPosition import windowPos
+from library.additionalFiles.closeWholeProgram import closeProgram
 def graphicUserInterface(appRoot):
-    root = tk.Tk()
-    windowPos(root=appRoot, windowWidth=1025, windowHeight=600)
+    appRoot.withdraw()
+    root = tk.Toplevel(appRoot)
+    windowPos(root=root, windowWidth=1025, windowHeight=600)
     root.title("System do zarzadzania sklepami i pracownikami w miescie")
     root.iconbitmap('assets/icons/app-icon.ico')
+    root.protocol("WM_DELETE_WINDOW", lambda: closeProgram(root, appRoot))
     root.columnconfigure(0, weight=1)
     root.columnconfigure(1, weight=1)
     root.columnconfigure(2, weight=1)
@@ -118,11 +121,21 @@ def graphicUserInterface(appRoot):
 
     mapFrame = tk.Frame(rightFrame, bg="yellow", borderwidth=1, relief="solid")
     mapFrame.grid(row=1, column=1, sticky="nsew", columnspan=3, pady=(1, 0))
+    mapFrame.columnconfigure(0, weight=1)
+    mapFrame.rowconfigure(0, weight=1)
 
-    mapLabel = tk.Label(mapFrame, text="mapLabel")  #####
-    mapLabel.pack()  #######
 
-    root.mainloop()
+
+
+
+
+
+
+
+
+    from library.additionalFiles.mapConnection import mapConn
+
+    Map = mapConn(root=mapFrame)
 
 
 """
