@@ -1,8 +1,9 @@
 import tkinter as tk
-def graphicUserInterface():
+from library.additionalFiles.windowPosition import windowPos
+def graphicUserInterface(appRoot):
     root = tk.Tk()
-    root.geometry('1025x600')
-    root.title("System do zarządzania sklepami i pracownikami w mieście")
+    windowPos(root=appRoot, windowWidth=1025, windowHeight=600)
+    root.title("System do zarzadzania sklepami i pracownikami w miescie")
     root.iconbitmap('assets/icons/app-icon.ico')
     root.columnconfigure(0, weight=1)
     root.columnconfigure(1, weight=1)
@@ -28,7 +29,7 @@ def graphicUserInterface():
     titleFrame.columnconfigure(2, weight=1)
     titleFrame.columnconfigure(3, weight=1)
 
-    titleLabel = (tk.Label(titleFrame, text="Narzędzia",
+    titleLabel = (tk.Label(titleFrame, text="Narzedzia",
                            font=("Roboto", 12, "bold")))
     titleLabel.grid(row=0, column=0, pady=2, ipady=4, ipadx=4, sticky="nsew", columnspan=3)
 
@@ -55,7 +56,7 @@ def graphicUserInterface():
     objectsFrame.rowconfigure(2, weight=9)
     objectsFrame.rowconfigure(3, weight=1)
     objectsFrame.rowconfigure(4, weight=1)
-    objectsLabel = tk.Label(objectsFrame, text="Lista obiektów", font=("Roboto", 10, "bold"))  #######
+    objectsLabel = tk.Label(objectsFrame, text="Lista obiektÃ³w", font=("Roboto", 10, "bold"))  #######
     objectsLabel.grid(row=0, column=0) # ######
 
     objectsButtonsFrame = tk.Frame(objectsFrame)
@@ -72,7 +73,7 @@ def graphicUserInterface():
     objectsList.grid(row=2, column=0, sticky="new", padx=10, pady=10)
 
 
-    from library.newWindow import newWindow
+    from library.additionalFiles.newWindow import newWindow
 
     objectsCommandButtonsFrame = tk.Frame(objectsFrame)
     objectsCommandButtonsFrame.grid(row=3, column=0, sticky="nsew", padx=10, pady=10)
@@ -87,10 +88,10 @@ def graphicUserInterface():
     objectsCommandEditButton = tk.Button(objectsCommandButtonsFrame, text = "Edytuj rekord", command = lambda: newWindow("edit", objectsFrame))
     objectsCommandEditButton.grid(row=0, column=1, sticky="ew")
 
-    objectsCommandDeleteButton = tk.Button(objectsCommandButtonsFrame, text = "Usuń rekord", command = lambda: deleteRecord())
+    objectsCommandDeleteButton = tk.Button(objectsCommandButtonsFrame, text = "UsuÅ„ rekord")#, command = lambda: deleteRecord())
     objectsCommandDeleteButton.grid(row=0, column=2, sticky="ew")
 
-    objectsShowAllButton = tk.Button(objectsFrame, text = "Pokaż szczegóły")
+    objectsShowAllButton = tk.Button(objectsFrame, text = "PokaÅ¼ szczegÃ³Å‚y")
     objectsShowAllButton.grid(row=4, column=0, sticky="nsew", padx=10, pady=10)
 
     rightFrame = tk.Frame(root, borderwidth=1, relief="solid", )
@@ -151,7 +152,7 @@ def graphicUserInterface():
     formEntryFrame.rowconfigure(2, weight=1)
     formEntryFrame.rowconfigure(3, weight=1)
 
-    formEntryName = tk.Label(formEntryFrame, text="Imię: ")
+    formEntryName = tk.Label(formEntryFrame, text="ImiÄ™: ")
     formEntryName.grid(row=0, column=0)
     formEntryNameValue = tk.Entry(formEntryFrame)
     formEntryNameValue.grid(row=0, column=1, sticky="ew", padx=(0,20))
@@ -193,9 +194,9 @@ def graphicUserInterface():
     objectDescriptionFrame.rowconfigure(2, weight=1)
     objectDescriptionFrame.rowconfigure(3, weight=1)
     objectDescriptionFrame.rowconfigure(4, weight=1)
-    objectDescriptionLabel = tk.Label(objectDescriptionFrame, text="Szczegóły obiektu", font=("Roboto", 10, "bold"))  #######
+    objectDescriptionLabel = tk.Label(objectDescriptionFrame, text="SzczegÃ³Å‚y obiektu", font=("Roboto", 10, "bold"))  #######
     objectDescriptionLabel.grid(row=0, column=0, columnspan=2)  ######
-    descriptionName = tk.Label(objectDescriptionFrame, text="Imię: ")
+    descriptionName = tk.Label(objectDescriptionFrame, text="ImiÄ™: ")
     descriptionName.grid(row=1, column=0, sticky="nsew")
     descriptionNameValue = tk.Entry(objectDescriptionFrame)
     descriptionNameValue.grid(row=1, column=1, sticky="ew", padx=(0,20))
