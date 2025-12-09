@@ -1,5 +1,4 @@
 def mapConn(root):
-    import tkinter
     import tkintermapview
 
     map_widget = tkintermapview.TkinterMapView(root, corner_radius=0)
