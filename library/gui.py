@@ -6,7 +6,7 @@ def graphicUserInterface(appRoot):
 
     appRoot.withdraw()
     root = tk.Toplevel(appRoot)
-    windowPos(root=root, windowWidth=1025, windowHeight=700)
+    windowPos(root=root, windowWidth=1200, windowHeight=700)
     root.title("System do zarzadzania sklepami i pracownikami w miescie")
     root.iconbitmap('assets/icons/app-icon.ico')
     root.protocol("WM_DELETE_WINDOW", lambda: closeProgram(root, appRoot))
@@ -73,20 +73,26 @@ def graphicUserInterface(appRoot):
     objectsButtonsFrame.columnconfigure(2, weight=1)
     objectsButtonsFrame.columnconfigure(3, weight=1)
 
-    objectsStoreListButton = tk.Button(objectsButtonsFrame, text = "Sklepy")
-    objectsStoreListButton.grid(row=0, column=0, sticky="ew", )
 
-    objectsEmployeeButton = tk.Button(objectsButtonsFrame, text = "Pracownicy")
-    objectsEmployeeButton.grid(row=0, column=1, sticky="ew",padx=5)
-
-    objectsDeliveriesButton = tk.Button(objectsButtonsFrame, text = "Dostawy")
-    objectsDeliveriesButton.grid(row=0, column=2, sticky="ew")
-
-    objectsDeliveryMen = tk.Button(objectsButtonsFrame, text = "Dostawcy")
-    objectsDeliveryMen.grid(row=0, column=3, sticky="ew", padx=(5,0))
+    from library.additionalFiles.showDatabase import showDatabase
 
     objectsList = tk.Listbox(objectsFrame, borderwidth=3, relief="groove")
     objectsList.grid(row=2, column=0, sticky="new", padx=10, pady=10)
+    objectsList.config(font=("Courier", 8))
+
+    objectsStoreListButton = tk.Button(objectsButtonsFrame, text = "Sklepy", command=lambda: showDatabase(table = "stores", listbox = objectsList))
+    objectsStoreListButton.grid(row=0, column=0, sticky="ew", )
+
+    objectsEmployeeButton = tk.Button(objectsButtonsFrame, text = "Pracownicy", command=lambda: showDatabase(table = "employeesInStore", listbox = objectsList))
+    objectsEmployeeButton.grid(row=0, column=1, sticky="ew",padx=5)
+
+    objectsDeliveriesButton = tk.Button(objectsButtonsFrame, text = "Dostawcy", command=lambda: showDatabase(table = "deliveryMenInStore", listbox = objectsList))
+    objectsDeliveriesButton.grid(row=0, column=2, sticky="ew")
+
+    objectsDeliveryMen = tk.Button(objectsButtonsFrame, text = "Dostawy", command=lambda: showDatabase(table = "deliveries", listbox = objectsList))
+    objectsDeliveryMen.grid(row=0, column=3, sticky="ew", padx=(5,0))
+
+
 
 
 
