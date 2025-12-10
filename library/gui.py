@@ -63,6 +63,8 @@ def graphicUserInterface(appRoot):
     objectsFrame.rowconfigure(2, weight=9)
     objectsFrame.rowconfigure(3, weight=1)
     objectsFrame.rowconfigure(4, weight=1)
+    objectsFrame.rowconfigure(5, weight=1)
+    objectsFrame.rowconfigure(6, weight=5)
     objectsLabel = tk.Label(objectsFrame, text="Lista obiektÃ³w", font=("Roboto", 10, "bold"))  #######
     objectsLabel.grid(row=0, column=0) # ######
 
@@ -78,20 +80,34 @@ def graphicUserInterface(appRoot):
 
     objectsList = tk.Listbox(objectsFrame, borderwidth=3, relief="groove")
     objectsList.grid(row=2, column=0, sticky="new", padx=10, pady=10)
-    objectsList.config(font=("Courier", 8))
+    objectsList.config(font=("Courier", 8), activestyle='none')
 
-    objectsStoreListButton = tk.Button(objectsButtonsFrame, text = "Sklepy", command=lambda: showDatabase(table = "stores", listbox = objectsList))
+    objectsStoreListButton = tk.Button(objectsButtonsFrame, text = "Sklepy", command=lambda: showDatabase(table = "stores", listbox = objectsList, type="single"))
     objectsStoreListButton.grid(row=0, column=0, sticky="ew", )
 
-    objectsEmployeeButton = tk.Button(objectsButtonsFrame, text = "Pracownicy", command=lambda: showDatabase(table = "employeesInStore", listbox = objectsList))
+    objectsEmployeeButton = tk.Button(objectsButtonsFrame, text = "Pracownicy", command=lambda: showDatabase(table = "employeesInStore", listbox = objectsList, type="single"))
     objectsEmployeeButton.grid(row=0, column=1, sticky="ew",padx=5)
 
-    objectsDeliveriesButton = tk.Button(objectsButtonsFrame, text = "Dostawcy", command=lambda: showDatabase(table = "deliveryMenInStore", listbox = objectsList))
+    objectsDeliveriesButton = tk.Button(objectsButtonsFrame, text = "Dostawcy", command=lambda: showDatabase(table = "deliveryMen", listbox = objectsList, type="single"))
     objectsDeliveriesButton.grid(row=0, column=2, sticky="ew")
 
-    objectsDeliveryMen = tk.Button(objectsButtonsFrame, text = "Dostawy", command=lambda: showDatabase(table = "deliveries", listbox = objectsList))
+    objectsDeliveryMen = tk.Button(objectsButtonsFrame, text = "Dostawy", command=lambda: showDatabase(table = "deliveries", listbox = objectsList, type="single"))
     objectsDeliveryMen.grid(row=0, column=3, sticky="ew", padx=(5,0))
 
+
+
+    objectsButtonsBelowFrame = tk.Frame(objectsFrame)
+    objectsButtonsBelowFrame.grid(row=3, column=0, sticky="nsew", padx=10, pady=10)
+    objectsButtonsBelowFrame.columnconfigure(0, weight=1)
+    objectsButtonsBelowFrame.columnconfigure(1, weight=1)
+
+    objectsEmployeeInStoreButton = tk.Button(objectsButtonsBelowFrame, text="Pracownicy w sklepie", command=lambda:
+                showDatabase(table = "employeesInStore", listbox = objectsList, type="multi", table2="stores", pickFrame=objectsFrame))
+    objectsEmployeeInStoreButton.grid(row=0, column=0, sticky="ew", padx=(5,0))
+
+    objectsDeliveryMenInStoreButton = tk.Button(objectsButtonsBelowFrame, text="Dostawcy w sklepie", command=lambda:
+                showDatabase(table = "deliveryMen", listbox = objectsList, type="multi", table2="stores", pickFrame=objectsFrame))
+    objectsDeliveryMenInStoreButton.grid(row=0, column=1, sticky="ew", padx=(5,0))
 
 
 
@@ -100,7 +116,7 @@ def graphicUserInterface(appRoot):
     from library.additionalFiles.newWindow import newWindow
 
     objectsCommandButtonsFrame = tk.Frame(objectsFrame)
-    objectsCommandButtonsFrame.grid(row=3, column=0, sticky="nsew", padx=10, pady=10)
+    objectsCommandButtonsFrame.grid(row=5, column=0, sticky="nsew", padx=10, pady=(40,0))
     objectsCommandButtonsFrame.columnconfigure(0, weight=1)
     objectsCommandButtonsFrame.columnconfigure(1, weight=1)
     objectsCommandButtonsFrame.columnconfigure(2, weight=1)
@@ -116,7 +132,7 @@ def graphicUserInterface(appRoot):
     objectsCommandDeleteButton.grid(row=0, column=2, sticky="ew")
 
     objectsShowAllButton = tk.Button(objectsFrame, text = "PokaÅ¼ szczegÃ³Å‚y")
-    objectsShowAllButton.grid(row=4, column=0, sticky="nsew", padx=10, pady=10)
+    objectsShowAllButton.grid(row=6, column=0, sticky="nsew", padx=10, pady=10)
 
     rightFrame = tk.Frame(root, borderwidth=1, relief="solid", )
     rightFrame.grid(row=0, column=1, sticky="nsew", rowspan=2, columnspan=3)
