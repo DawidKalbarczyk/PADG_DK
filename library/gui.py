@@ -80,18 +80,22 @@ def graphicUserInterface(appRoot):
 
     objectsList = tk.Listbox(objectsFrame, borderwidth=3, relief="groove")
     objectsList.grid(row=2, column=0, sticky="new", padx=10, pady=10)
-    objectsList.config(font=("Courier", 8), activestyle='none')
+    objectsList.config(font=("Roboto", 8), activestyle='none')
 
-    objectsStoreListButton = tk.Button(objectsButtonsFrame, text = "Sklepy", command=lambda: showDatabase(table = "stores", listbox = objectsList, type="single"))
+    objectsStoreListButton = tk.Button(objectsButtonsFrame, text = "Sklepy", command=lambda: showDatabase(
+        rootListbox=objectsList, type="single", table="stores"))
     objectsStoreListButton.grid(row=0, column=0, sticky="ew", )
 
-    objectsEmployeeButton = tk.Button(objectsButtonsFrame, text = "Pracownicy", command=lambda: showDatabase(table = "employeesInStore", listbox = objectsList, type="single"))
+    objectsEmployeeButton = tk.Button(objectsButtonsFrame, text = "Pracownicy", command=lambda: showDatabase(
+        rootListbox=objectsList, type="single", table="employeesInStore"))
     objectsEmployeeButton.grid(row=0, column=1, sticky="ew",padx=5)
 
-    objectsDeliveriesButton = tk.Button(objectsButtonsFrame, text = "Dostawcy", command=lambda: showDatabase(table = "deliveryMen", listbox = objectsList, type="single"))
+    objectsDeliveriesButton = tk.Button(objectsButtonsFrame, text = "Dostawcy", command=lambda: showDatabase(
+        rootListbox=objectsList, type="single", table="deliveryMen"))
     objectsDeliveriesButton.grid(row=0, column=2, sticky="ew")
 
-    objectsDeliveryMen = tk.Button(objectsButtonsFrame, text = "Dostawy", command=lambda: showDatabase(table = "deliveries", listbox = objectsList, type="single"))
+    objectsDeliveryMen = tk.Button(objectsButtonsFrame, text = "Dostawy", command=lambda: showDatabase(
+        rootListbox=objectsList, type="single", table="deliveries"))
     objectsDeliveryMen.grid(row=0, column=3, sticky="ew", padx=(5,0))
 
 
@@ -102,11 +106,12 @@ def graphicUserInterface(appRoot):
     objectsButtonsBelowFrame.columnconfigure(1, weight=1)
 
     objectsEmployeeInStoreButton = tk.Button(objectsButtonsBelowFrame, text="Pracownicy w sklepie", command=lambda:
-                showDatabase(table = "employeesInStore", listbox = objectsList, type="multi", table2="stores", pickFrame=objectsFrame))
+    showDatabase(rootListbox=objectsList, type="multi", table="employeesInStore", table2="stores",
+                 pickFrame=objectsFrame))
     objectsEmployeeInStoreButton.grid(row=0, column=0, sticky="ew", padx=(5,0))
 
     objectsDeliveryMenInStoreButton = tk.Button(objectsButtonsBelowFrame, text="Dostawcy w sklepie", command=lambda:
-                showDatabase(table = "deliveryMen", listbox = objectsList, type="multi", table2="stores", pickFrame=objectsFrame))
+    showDatabase(rootListbox=objectsList, type="multi", table="deliveryMen", table2="stores", pickFrame=objectsFrame))
     objectsDeliveryMenInStoreButton.grid(row=0, column=1, sticky="ew", padx=(5,0))
 
 
@@ -128,13 +133,13 @@ def graphicUserInterface(appRoot):
     objectsCommandEditButton = tk.Button(objectsCommandButtonsFrame, text = "Edytuj rekord", command = lambda: newWindow("edit", objectsFrame))
     objectsCommandEditButton.grid(row=0, column=1, sticky="ew", padx=5)
 
-    objectsCommandDeleteButton = tk.Button(objectsCommandButtonsFrame, text = "Usun„ rekord")#, command = lambda: deleteRecord())
+    objectsCommandDeleteButton = tk.Button(objectsCommandButtonsFrame, text = "Usun rekord")#, command = lambda: deleteRecord())
     objectsCommandDeleteButton.grid(row=0, column=2, sticky="ew")
 
-    objectsShowAllButton = tk.Button(objectsFrame, text = "PokaÅ¼ szczegÃ³Å‚y")
+    objectsShowAllButton = tk.Button(objectsFrame, text = "Pokaz szczegoly")
     objectsShowAllButton.grid(row=6, column=0, sticky="nsew", padx=10, pady=10)
 
-    rightFrame = tk.Frame(root, borderwidth=1, relief="solid", )
+    rightFrame = tk.Frame(root, borderwidth=1, relief="solid" )
     rightFrame.grid(row=0, column=1, sticky="nsew", rowspan=2, columnspan=3)
     rightFrame.columnconfigure(0, weight=0)
     rightFrame.rowconfigure(1, weight=1)

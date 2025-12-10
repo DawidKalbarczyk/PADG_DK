@@ -1,8 +1,9 @@
-from ..engine import dbConnect
-def showDatabase(listbox, type, table="employeesInStore", table2=None, pickFrame=None):
+from library.engine import dbConnect
+from library.additionalFiles.guiFunctions import removeCursorSelection
+def showDatabase(rootListbox, type, table="employeesInStore", table2=None, pickFrame=None):
     match type:
         case "single":
-            listbox.delete(0, "end")
+            rootListbox.delete(0, "end")
             conn = dbConnect()
             cursor = conn.cursor()
             SQLcolumns = f"SELECT column_name FROM information_schema.columns WHERE table_name = '{table}'"
@@ -52,7 +53,7 @@ def showDatabase(listbox, type, table="employeesInStore", table2=None, pickFrame
 
             if len(columnNames)==3:
                 col1,col2,col3 = columnNames[0].ljust(16), columnNames[1].ljust(16), columnNames[2].ljust(16)
-                listbox.insert("end", f"{col1} {col2} {col3}")
+                rootListbox.insert("end", f"{col1} {col2} {col3}")
                 for data in dataColumns:
                     datTemp = []
                     data = data[1:-1]
@@ -62,13 +63,13 @@ def showDatabase(listbox, type, table="employeesInStore", table2=None, pickFrame
                         dat = dat.strip("'")
                         datTemp.append(dat)
                     datTemp[0], datTemp[1], datTemp[2] = datTemp[0].ljust(16),datTemp[1].ljust(16),datTemp[2].ljust(16)
-                    listbox.insert("end", f"{datTemp[0]} {datTemp[1]} {datTemp[2]}")
+                    rootListbox.insert("end", f"{datTemp[0]} {datTemp[1]} {datTemp[2]}")
 
 
 
             elif len(columnNames)==4:
                 col1, col2, col3, col4= columnNames[0].ljust(7), columnNames[1].ljust(12), columnNames[2].ljust(15), columnNames[3].ljust(7)
-                listbox.insert("end", f"{col1} {col2} {col3} {col4}")
+                rootListbox.insert("end", f"{col1} {col2} {col3} {col4}")
                 for data in dataColumns:
                     datTemp = []
                     data = data[1:-1]
@@ -81,7 +82,7 @@ def showDatabase(listbox, type, table="employeesInStore", table2=None, pickFrame
                         datTemp[0].ljust(7), datTemp[1].ljust(12),
                         datTemp[2].ljust(15), datTemp[3].ljust(7))
 
-                    listbox.insert("end", f"{datTemp[0]} {datTemp[1]} {datTemp[2]} {datTemp[3]}")
+                    rootListbox.insert("end", f"{datTemp[0]} {datTemp[1]} {datTemp[2]} {datTemp[3]}")
             cursor.close()
 
         case "multi":
@@ -111,28 +112,72 @@ def showDatabase(listbox, type, table="employeesInStore", table2=None, pickFrame
 
 
 
-            def pickOptionWindow():
-                pickWindow = tk.Toplevel()
-                from library.additionalFiles.windowPosition import windowPos
-                windowPos(root=pickWindow, windowWidth=900, windowHeight=500)
-                pickWindow.title("Formularz wyboru")
-                pickWindow.iconbitmap("assets/icons/form-18.ico")
-                import os
-                print(os.path.abspath(__file__))
-            objectsPickOptionButton = tk.Button(objectsPickFrame, text="Wybierz", command=lambda: pickOptionWindow())
+            def pickOptionWindow(root):
+                root.deiconify()
+
+            from library.additionalFiles.windowPosition import windowPos
+            pickWindow = tk.Toplevel()
+            pickWindow.withdraw()
+            pickWindow.columnconfigure(0, weight=1)
+            pickWindow.columnconfigure(1, weight=1)
+            pickWindow.columnconfigure(2, weight=1)
+            pickWindow.rowconfigure(0, weight=1)
+            pickWindow.rowconfigure(1, weight=9)
+            windowPos(root=pickWindow, windowWidth=900, windowHeight=500)
+            pickWindow.title("Formularz wyboru")
+            pickWindow.iconbitmap("assets/icons/form-18.ico")
+            pickWindowTitle = tk.Label(pickWindow, text="Wybierz sklep", font=("Roboto", 14, "bold"))
+            pickWindowTitle.grid(row=0, column=1, sticky="nsew")
+
+            pickWindowListbox = tk.Listbox(pickWindow)
+            pickWindowListbox.grid(row=1, column=0, sticky="nsew", columnspan=3, pady=(10, 0))
+            pickWindowListbox.config(font=("Roboto", 8), activestyle='none')
+            removeCursorSelection(pickWindowListbox)
+            pickWindowListbox.delete(0, tk.END)
+
+            objectsPickOptionButton = tk.Button(objectsPickFrame, text="Wybierz", command=lambda: pickOptionWindow(pickWindow))
             objectsPickOptionButton.grid(row=1, column=1, sticky="nsew", padx=(7,10))
 
-            #TODO zrob generowanie w nowym okienku opcji do wyboru z przyciskiem "Ackeptuj"
+
             objectsPickOptionEndTitle = tk.Label(objectsPickFrame, text="sklepu")
             objectsPickOptionEndTitle.grid(row=1, column=2, sticky="nsew")
+
+            cursor = dbConnect().cursor()
+            SQL1 = "SELECT column_name FROM information_schema.columns WHERE table_name = 'stores'"
+            cursor.execute(SQL1)
+            columns = cursor.fetchall()
+            SQL2 = 'SELECT DISTINCT id, address, owner FROM "stores"'
+            cursor.execute(SQL2)
+            dataDatabase = cursor.fetchall()
+            columnNames= []
+            dataColumns = []
+            for tuples in columns:
+                for columnName in tuples:
+                    columnNames.append(columnName.upper())
+            for data in dataDatabase:
+                dataColumns.append(str(data))
+            columnNames.pop(3)
+            columnNames.pop(3)
+            col1, col2, col3 = columnNames[0].ljust(90), columnNames[1].ljust(90), columnNames[2].ljust(90)
+
+
+            print(columnNames)
+            print(dataColumns)
+            pickWindowListbox.insert("end", f"{col1} {col2} {col3}")
+            # TODO zrob generowanie w nowym okienku opcji do wyboru z przyciskiem "Ackeptuj"
+            # TODO dodaj generowanie z sqla wierszy z wartosciami
             match table:
                 case "employeesInStore":
-                    pass
-                case "deliveryMen":
-                    pass
+                    for x in columnNames:  # git  DO USUNIECIA
+                        print(x + "aaaa")
 
-    from library.additionalFiles.guiFunctions import removeCursorSelection
-    removeCursorSelection(listbox)
+                case "deliveryMen":
+                    for x in dataColumns:  # git ale rozbic D0 USUNECIA
+                        print(x + "bbb")
+
+
+            cursor.close()
+    removeCursorSelection(rootListbox)
 
     #print(columnNames)
     #print(dataColumns)
