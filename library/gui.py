@@ -65,7 +65,7 @@ def graphicUserInterface(appRoot):
     objectsFrame.rowconfigure(4, weight=1)
     objectsFrame.rowconfigure(5, weight=1)
     objectsFrame.rowconfigure(6, weight=5)
-    objectsLabel = tk.Label(objectsFrame, text="Lista obiektÃ³w", font=("Roboto", 10, "bold"))  #######
+    objectsLabel = tk.Label(objectsFrame, text="Lista obiektow", font=("Roboto", 10, "bold"))  #######
     objectsLabel.grid(row=0, column=0) # ######
 
     objectsButtonsFrame = tk.Frame(objectsFrame)
@@ -77,26 +77,42 @@ def graphicUserInterface(appRoot):
 
 
     from library.additionalFiles.showDatabase import showDatabase
-
+    from library.additionalFiles.labelTextChange import textChange
     objectsList = tk.Listbox(objectsFrame, borderwidth=3, relief="groove")
     objectsList.grid(row=2, column=0, sticky="new", padx=10, pady=10)
-    objectsList.config(font=("Roboto", 8), activestyle='none')
+    objectsList.config(font=("Courier", 8), activestyle='none')
 
-    objectsStoreListButton = tk.Button(objectsButtonsFrame, text = "Sklepy", command=lambda: showDatabase(
-        rootListbox=objectsList, type="single", table="stores"))
+    objectsStoreListButton = tk.Button(
+        objectsButtonsFrame,
+        text = "Sklepy",
+        command=lambda: [
+        textChange(objectsLabel, "sklepow"),
+        showDatabase(rootListbox=objectsList, type="single", table="stores")])
     objectsStoreListButton.grid(row=0, column=0, sticky="ew", )
 
-    objectsEmployeeButton = tk.Button(objectsButtonsFrame, text = "Pracownicy", command=lambda: showDatabase(
-        rootListbox=objectsList, type="single", table="employeesInStore"))
+    objectsEmployeeButton = tk.Button(
+        objectsButtonsFrame,
+        text = "Pracownicy",
+        command=lambda: [
+        textChange(objectsLabel, "pracownikow"),
+        showDatabase(rootListbox=objectsList, type="single", table="employeesInStore")])
     objectsEmployeeButton.grid(row=0, column=1, sticky="ew",padx=5)
 
-    objectsDeliveriesButton = tk.Button(objectsButtonsFrame, text = "Dostawcy", command=lambda: showDatabase(
-        rootListbox=objectsList, type="single", table="deliveryMen"))
+    objectsDeliveriesButton = tk.Button(
+        objectsButtonsFrame,
+        text = "Dostawcy",
+        command=lambda: [
+        textChange(objectsLabel, "dostawcow"),
+        showDatabase(rootListbox=objectsList, type="single", table="deliveryMen")])
     objectsDeliveriesButton.grid(row=0, column=2, sticky="ew")
 
-    objectsDeliveryMen = tk.Button(objectsButtonsFrame, text = "Dostawy", command=lambda: showDatabase(
-        rootListbox=objectsList, type="single", table="deliveries"))
-    objectsDeliveryMen.grid(row=0, column=3, sticky="ew", padx=(5,0))
+    objectsDeliveryMenButton = tk.Button(
+        objectsButtonsFrame,
+        text ="Dostawy",
+        command=lambda: [
+        textChange(objectsLabel, "dostaw"),
+        showDatabase(rootListbox=objectsList, type="single", table="deliveries")])
+    objectsDeliveryMenButton.grid(row=0, column=3, sticky="ew", padx=(5, 0))
 
 
 
@@ -105,13 +121,20 @@ def graphicUserInterface(appRoot):
     objectsButtonsBelowFrame.columnconfigure(0, weight=1)
     objectsButtonsBelowFrame.columnconfigure(1, weight=1)
 
-    objectsEmployeeInStoreButton = tk.Button(objectsButtonsBelowFrame, text="Pracownicy w sklepie", command=lambda:
-    showDatabase(rootListbox=objectsList, type="multi", table="employeesInStore", table2="stores",
-                 pickFrame=objectsFrame))
+    objectsEmployeeInStoreButton = tk.Button(
+        objectsButtonsBelowFrame,
+        text="Pracownicy w sklepie",
+        command=lambda: [
+            textChange(objectsLabel, "pracownikow w sklepach"),
+            showDatabase(rootListbox=objectsList, type="multi", table="employeesInStore", table2="stores",pickFrame=objectsFrame)])
     objectsEmployeeInStoreButton.grid(row=0, column=0, sticky="ew", padx=(5,0))
 
-    objectsDeliveryMenInStoreButton = tk.Button(objectsButtonsBelowFrame, text="Dostawcy w sklepie", command=lambda:
-    showDatabase(rootListbox=objectsList, type="multi", table="deliveryMen", table2="stores", pickFrame=objectsFrame))
+    objectsDeliveryMenInStoreButton = tk.Button(
+        objectsButtonsBelowFrame,
+        text="Dostawcy w sklepie",
+        command=lambda: [
+            textChange(objectsLabel, "dostawcow w sklepach"),
+            showDatabase(rootListbox=objectsList, type="multi", table="deliveryMen", table2="stores", pickFrame=objectsFrame)])
     objectsDeliveryMenInStoreButton.grid(row=0, column=1, sticky="ew", padx=(5,0))
 
 

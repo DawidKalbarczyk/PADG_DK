@@ -35,8 +35,6 @@ def newWindow(type, parentWindow, table):
             conn = dbConnect()
             cursor = conn.cursor()
             struct, columnNames = generateEntryFromSQL(root=windowGeneratedSQL, table=table, struct=generatedStructure)
-            print(struct)
-            print(columnNames)
             columnNamesString = ""
             for columnName in columnNames:
                 columnNamesString += '"' + columnName + '", '

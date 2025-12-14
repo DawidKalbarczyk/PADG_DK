@@ -88,6 +88,7 @@ def showDatabase(rootListbox, type, table="employeesInStore", table2=None, pickF
         case "multi":
             import tkinter as tk
             objectsPickFrame = tk.Frame(pickFrame)
+            #objectsPickFrame.bind_all("<Button-1>",lambda event: event.widget.focus_set())
             objectsPickFrame.grid(row=4, column=0, sticky="nsew", padx=10, pady=(20,0))
             objectsPickFrame.columnconfigure(0, weight=1)
             objectsPickFrame.columnconfigure(1, weight=1)
@@ -95,25 +96,36 @@ def showDatabase(rootListbox, type, table="employeesInStore", table2=None, pickF
             objectsPickFrame.rowconfigure(0, weight=1)
             objectsPickFrame.rowconfigure(1, weight=2)
 
+
             objectsPickTitle = tk.Label(objectsPickFrame, text="Wybierz sklep", font=("Roboto", 10, "bold"))
             objectsPickTitle.grid(row=0, column=1, sticky="nsew")
 
 
-            def pickOption():
+            def pickOptionLabels():
                 title = ""
                 if table == "employeesInStore":
                     title = "Pracownicy dla: "
                 elif table == "deliveryMen":
                     title = "Dostawcy dla: "
                 return title
-            objectsPickOptionTitle = tk.Label(objectsPickFrame, text=f"{pickOption()}")
+            objectsPickOptionTitle = tk.Label(objectsPickFrame, text=f"{pickOptionLabels()}")
             objectsPickOptionTitle.grid(row=1, column=0, sticky="nsew")
 
 
-
-
-            def pickOptionWindow(root):
+            def pickOptionWindow(root, pickListbox):
                 root.deiconify()
+                cursor = dbConnect().cursor()
+                SQL2 = 'SELECT id, address, owner FROM "stores" ORDER BY id ASC'
+                cursor.execute(SQL2)
+                dataDatabase = cursor.fetchall()
+                dataColumns = []
+                for data in dataDatabase:
+                    dataColumns.append(str(data))
+                    print(data)
+                    dat1, dat2, dat3 = str(data[0]).ljust(45), str(data[1]).ljust(45), str(data[2]).ljust(45)
+                    print(dat1, dat2, dat3)
+                    pickListbox.insert("end", f"{dat1} {dat2} {dat3}")
+                cursor.close()
 
             from library.additionalFiles.windowPosition import windowPos
             pickWindow = tk.Toplevel()
@@ -123,57 +135,74 @@ def showDatabase(rootListbox, type, table="employeesInStore", table2=None, pickF
             pickWindow.columnconfigure(2, weight=1)
             pickWindow.rowconfigure(0, weight=1)
             pickWindow.rowconfigure(1, weight=9)
+            pickWindow.rowconfigure(2, weight=1)
             windowPos(root=pickWindow, windowWidth=900, windowHeight=500)
             pickWindow.title("Formularz wyboru")
             pickWindow.iconbitmap("assets/icons/form-18.ico")
-            pickWindowTitle = tk.Label(pickWindow, text="Wybierz sklep", font=("Roboto", 14, "bold"))
+            cursor = dbConnect().cursor()
+
+
+
+
+
+            pickWindowTitle = tk.Label(pickWindow, text="Wybierz sklep", font=("Courier", 14, "bold"))
             pickWindowTitle.grid(row=0, column=1, sticky="nsew")
 
             pickWindowListbox = tk.Listbox(pickWindow)
             pickWindowListbox.grid(row=1, column=0, sticky="nsew", columnspan=3, pady=(10, 0))
-            pickWindowListbox.config(font=("Roboto", 8), activestyle='none')
+            pickWindowListbox.config(font=("Courier", 8), activestyle='none')
             removeCursorSelection(pickWindowListbox)
             pickWindowListbox.delete(0, tk.END)
 
-            objectsPickOptionButton = tk.Button(objectsPickFrame, text="Wybierz", command=lambda: pickOptionWindow(pickWindow))
+            def pickListboxElement():
+                selectedElementNative = pickWindowListbox.curselection()
+                selectedElement = str(selectedElementNative[0]).strip("(",).strip(")").strip(",")
+                return selectedElement
+
+            #def
+
+            pickWindowButton = tk.Button(pickWindow, text="Akceptuj", font=("Courier", 12), command=lambda: pickedOption(pickWindow, pickListboxElement()))
+            pickWindowButton.grid(row=2, column=1, sticky="ew")
+
+
+            objectsPickOptionButton = tk.Button(objectsPickFrame, text="Wybierz", command=lambda: pickOptionWindow(pickWindow, pickWindowListbox))
             objectsPickOptionButton.grid(row=1, column=1, sticky="nsew", padx=(7,10))
 
 
             objectsPickOptionEndTitle = tk.Label(objectsPickFrame, text="sklepu")
             objectsPickOptionEndTitle.grid(row=1, column=2, sticky="nsew")
 
-            cursor = dbConnect().cursor()
+
+
+
             SQL1 = "SELECT column_name FROM information_schema.columns WHERE table_name = 'stores'"
             cursor.execute(SQL1)
             columns = cursor.fetchall()
-            SQL2 = 'SELECT DISTINCT id, address, owner FROM "stores"'
-            cursor.execute(SQL2)
-            dataDatabase = cursor.fetchall()
+
             columnNames= []
             dataColumns = []
             for tuples in columns:
                 for columnName in tuples:
                     columnNames.append(columnName.upper())
-            for data in dataDatabase:
-                dataColumns.append(str(data))
+
             columnNames.pop(3)
             columnNames.pop(3)
-            col1, col2, col3 = columnNames[0].ljust(90), columnNames[1].ljust(90), columnNames[2].ljust(90)
+            col1, col2, col3 = columnNames[0].ljust(45), columnNames[1].ljust(45), columnNames[2].ljust(45)
+            #dat1, dat2, dat3 = dataColumns[0], dataColumns[1], dataColumns[2]
 
-
-            print(columnNames)
-            print(dataColumns)
             pickWindowListbox.insert("end", f"{col1} {col2} {col3}")
             # TODO zrob generowanie w nowym okienku opcji do wyboru z przyciskiem "Ackeptuj"
             # TODO dodaj generowanie z sqla wierszy z wartosciami
             match table:
                 case "employeesInStore":
-                    for x in columnNames:  # git  DO USUNIECIA
-                        print(x + "aaaa")
+                    def pickedOption(toDestroy, element):
+                        SQL = "SELECT "
+                        toDestroy.destroy()
 
                 case "deliveryMen":
-                    for x in dataColumns:  # git ale rozbic D0 USUNECIA
-                        print(x + "bbb")
+                    def pickedOption(toDestroy, element):
+                        SQL = "SELECT "
+                        toDestroy.destroy()
 
 
             cursor.close()
