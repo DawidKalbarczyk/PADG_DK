@@ -125,7 +125,7 @@ def graphicUserInterface(appRoot):
         objectsButtonsBelowFrame,
         text="Pracownicy w sklepie",
         command=lambda: [
-            textChange(objectsLabel, "pracownikow w sklepach"),
+            textChange(objectsLabel, "pracownikow w sklepie"),
             showDatabase(rootListbox=objectsList, type="multi", table="employeesInStore", table2="stores",pickFrame=objectsFrame)])
     objectsEmployeeInStoreButton.grid(row=0, column=0, sticky="ew", padx=(5,0))
 
@@ -133,7 +133,7 @@ def graphicUserInterface(appRoot):
         objectsButtonsBelowFrame,
         text="Dostawcy w sklepie",
         command=lambda: [
-            textChange(objectsLabel, "dostawcow w sklepach"),
+            textChange(objectsLabel, "dostawcow w sklepie"),
             showDatabase(rootListbox=objectsList, type="multi", table="deliveryMen", table2="stores", pickFrame=objectsFrame)])
     objectsDeliveryMenInStoreButton.grid(row=0, column=1, sticky="ew", padx=(5,0))
 

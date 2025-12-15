@@ -16,7 +16,7 @@ def showDatabase(rootListbox, type, table="employeesInStore", table2=None, pickF
                 case "stores":
                     columns.pop(1)
                     columns.pop(3)
-                    SQLdata = f'SELECT id,owner,"employeesNr" FROM {table}'
+                    SQLdata = f'SELECT id,owner,"employeesNr" FROM "{table}" ORDER BY id ASC'
                 case "employeesInStore":
                     columns.pop(1)
                     columns.pop(3)
@@ -25,18 +25,18 @@ def showDatabase(rootListbox, type, table="employeesInStore", table2=None, pickF
                     columns.pop(3)
                     columns.pop(3)
                     columns.pop(4)
-                    SQLdata = f'SELECT id,"firstName","lastName",store FROM "{table}"'
+                    SQLdata = f'SELECT id,"firstName","lastName",store FROM "{table}" ORDER BY id ASC'
                 case "deliveryMen":
                     columns.pop(1)
                     columns.pop(3)
                     columns.pop(3)
                     columns.pop(3)
-                    SQLdata = f'SELECT id,"firstName","lastName",store FROM "{table}"'
+                    SQLdata = f'SELECT id,"firstName","lastName",store FROM "{table}" ORDER BY id ASC'
                 case "deliveries":
                     columns.pop(1)
                     columns.pop(1)
                     columns.pop(1)
-                    SQLdata = f'SELECT id, date, distance FROM "{table}"'
+                    SQLdata = f'SELECT id, date, distance FROM "{table}" ORDER BY id ASC'
 
             cursor.execute(SQLdata)
             dataDatabase = cursor.fetchall()
@@ -113,18 +113,38 @@ def showDatabase(rootListbox, type, table="employeesInStore", table2=None, pickF
 
 
             def pickOptionWindow(root, pickListbox):
+                pickListbox.delete(0, tk.END)
                 root.deiconify()
                 cursor = dbConnect().cursor()
                 SQL2 = 'SELECT id, address, owner FROM "stores" ORDER BY id ASC'
                 cursor.execute(SQL2)
                 dataDatabase = cursor.fetchall()
                 dataColumns = []
+
+                SQL1 = "SELECT column_name FROM information_schema.columns WHERE table_name = 'stores'"
+                cursor.execute(SQL1)
+                columns = cursor.fetchall()
+
+                columnNames = []
+
+                for tuples in columns:
+                    for columnName in tuples:
+                        columnNames.append(columnName.upper())
+
+                columnNames.pop(3)
+                columnNames.pop(3)
+                col1, col2, col3 = columnNames[0].ljust(45), columnNames[1].ljust(45), columnNames[2].ljust(45)
+
+                pickListbox.insert("end", f"{col1} {col2} {col3}")
                 for data in dataDatabase:
                     dataColumns.append(str(data))
-                    print(data)
                     dat1, dat2, dat3 = str(data[0]).ljust(45), str(data[1]).ljust(45), str(data[2]).ljust(45)
-                    print(dat1, dat2, dat3)
                     pickListbox.insert("end", f"{dat1} {dat2} {dat3}")
+
+
+
+
+
                 cursor.close()
 
             from library.additionalFiles.windowPosition import windowPos
@@ -156,8 +176,10 @@ def showDatabase(rootListbox, type, table="employeesInStore", table2=None, pickF
 
             def pickListboxElement():
                 selectedElementNative = pickWindowListbox.curselection()
-                selectedElement = str(selectedElementNative[0]).strip("(",).strip(")").strip(",")
-                return selectedElement
+                selectedElement = pickWindowListbox.get(selectedElementNative[0])
+                storeID = selectedElement.split()
+                storeID = storeID[0].strip()
+                return storeID
 
             #def
 
@@ -175,34 +197,81 @@ def showDatabase(rootListbox, type, table="employeesInStore", table2=None, pickF
 
 
 
-            SQL1 = "SELECT column_name FROM information_schema.columns WHERE table_name = 'stores'"
-            cursor.execute(SQL1)
-            columns = cursor.fetchall()
 
-            columnNames= []
-            dataColumns = []
-            for tuples in columns:
-                for columnName in tuples:
-                    columnNames.append(columnName.upper())
-
-            columnNames.pop(3)
-            columnNames.pop(3)
-            col1, col2, col3 = columnNames[0].ljust(45), columnNames[1].ljust(45), columnNames[2].ljust(45)
-            #dat1, dat2, dat3 = dataColumns[0], dataColumns[1], dataColumns[2]
-
-            pickWindowListbox.insert("end", f"{col1} {col2} {col3}")
             # TODO zrob generowanie w nowym okienku opcji do wyboru z przyciskiem "Ackeptuj"
             # TODO dodaj generowanie z sqla wierszy z wartosciami
+
             match table:
                 case "employeesInStore":
                     def pickedOption(toDestroy, element):
-                        SQL = "SELECT "
-                        toDestroy.destroy()
+                        rootListbox.delete(0, tk.END)
+                        cursor = dbConnect().cursor()
+                        SQLconditionData = f'SELECT id,"firstName","lastName",store FROM "employeesInStore" WHERE store=\'{element}\''
+                        cursor.execute(SQLconditionData)
+                        SQLdataBack = cursor.fetchall()
+
+                        SQL1 = "SELECT column_name FROM information_schema.columns WHERE table_name = 'employeesInStore'"
+                        cursor.execute(SQL1)
+                        columns = cursor.fetchall()
+
+                        columnNames = []
+
+                        for tuples in columns:
+                            for columnName in tuples:
+                                columnNames.append(columnName.upper())
+                        print(columnNames)
+                        columnNames.pop(1)
+                        columnNames.pop(3)
+                        columnNames.pop(3)
+                        columnNames.pop(3)
+                        columnNames.pop(3)
+                        columnNames.pop(3)
+                        columnNames.pop(4)
+                        col1, col2, col3, col4 = columnNames[0].ljust(7), columnNames[1].ljust(12), columnNames[2].ljust(15), columnNames[3].ljust(7)
+
+                        rootListbox.insert("end", f"{col1} {col2} {col3} {col4}")
+
+                        for data in SQLdataBack:
+                            dat1, dat2, dat3, dat4 = (str(data[0]).ljust(7), str(data[1]).ljust(12),
+                                                      str(data[2]).ljust(15), str(data[3]).ljust(7))
+                            rootListbox.insert("end", f"{dat1} {dat2} {dat3} {dat4}")
+
+                        toDestroy.withdraw()
+                        cursor.close()
 
                 case "deliveryMen":
                     def pickedOption(toDestroy, element):
-                        SQL = "SELECT "
-                        toDestroy.destroy()
+                        rootListbox.delete(0, tk.END)
+                        cursor = dbConnect().cursor()
+                        SQLconditionData = f'SELECT id,"firstName","lastName",store FROM "deliveryMen" WHERE store=\'{element}\''
+                        cursor.execute(SQLconditionData)
+                        SQLdataBack = cursor.fetchall()
+
+                        SQL1 = "SELECT column_name FROM information_schema.columns WHERE table_name = 'deliveryMen'"
+                        cursor.execute(SQL1)
+                        columns = cursor.fetchall()
+
+                        columnNames = []
+
+                        for tuples in columns:
+                            for columnName in tuples:
+                                columnNames.append(columnName.upper())
+                        print(columnNames)
+                        columnNames.pop(1)
+                        columnNames.pop(3)
+                        columnNames.pop(3)
+                        columnNames.pop(3)
+                        col1, col2, col3, col4 = columnNames[0].ljust(7), columnNames[1].ljust(12), columnNames[2].ljust(15), columnNames[3].ljust(7)
+
+                        rootListbox.insert("end", f"{col1} {col2} {col3} {col4}")
+                        print(SQLdataBack)
+                        for data in SQLdataBack:
+                            dat1, dat2, dat3, dat4 = (str(data[0]).ljust(7), str(data[1]).ljust(12),
+                                                      str(data[2]).ljust(15), str(data[3]).ljust(7))
+                            rootListbox.insert("end", f"{dat1} {dat2} {dat3} {dat4}")
+
+                        toDestroy.withdraw()
+                        cursor.close()
 
 
             cursor.close()
