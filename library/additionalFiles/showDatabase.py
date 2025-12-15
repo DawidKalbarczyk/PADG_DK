@@ -194,13 +194,6 @@ def showDatabase(rootListbox, type, table="employeesInStore", table2=None, pickF
             objectsPickOptionEndTitle = tk.Label(objectsPickFrame, text="sklepu")
             objectsPickOptionEndTitle.grid(row=1, column=2, sticky="nsew")
 
-
-
-
-
-            # TODO zrob generowanie w nowym okienku opcji do wyboru z przyciskiem "Ackeptuj"
-            # TODO dodaj generowanie z sqla wierszy z wartosciami
-
             match table:
                 case "employeesInStore":
                     def pickedOption(toDestroy, element):
@@ -276,6 +269,3 @@ def showDatabase(rootListbox, type, table="employeesInStore", table2=None, pickF
 
             cursor.close()
     removeCursorSelection(rootListbox)
-
-    #print(columnNames)
-    #print(dataColumns)
