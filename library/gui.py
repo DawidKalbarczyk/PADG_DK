@@ -2,7 +2,6 @@ import tkinter as tk
 from library.additionalFiles.windowPosition import windowPos
 from library.additionalFiles.closeWholeProgram import closeProgram
 def graphicUserInterface(appRoot):
-    table = "employeesInStore"
 
     appRoot.withdraw()
     root = tk.Toplevel(appRoot)
@@ -82,12 +81,19 @@ def graphicUserInterface(appRoot):
     objectsList.grid(row=2, column=0, sticky="new", padx=10, pady=10)
     objectsList.config(font=("Courier", 8), activestyle='none')
 
+
+    from library.additionalFiles.guiFunctions import selectedTableFunc
+    #from library.additionalFiles import guiFunctions
     objectsStoreListButton = tk.Button(
         objectsButtonsFrame,
         text = "Sklepy",
         command=lambda: [
         textChange(objectsLabel, "sklepow"),
-        showDatabase(rootListbox=objectsList, type="single", table="stores")])
+        showDatabase(rootListbox=objectsList, type="single", table="stores"),
+        selectedTableFunc("sklepy", objectsStoreListButton)
+        ])
+
+
     objectsStoreListButton.grid(row=0, column=0, sticky="ew", )
 
     objectsEmployeeButton = tk.Button(
@@ -95,24 +101,30 @@ def graphicUserInterface(appRoot):
         text = "Pracownicy",
         command=lambda: [
         textChange(objectsLabel, "pracownikow"),
-        showDatabase(rootListbox=objectsList, type="single", table="employeesInStore")])
+        showDatabase(rootListbox=objectsList, type="single", table="employeesInStore"),
+        selectedTableFunc("pracownicy", objectsEmployeeButton)
+        ])
     objectsEmployeeButton.grid(row=0, column=1, sticky="ew",padx=5)
-
-    objectsDeliveriesButton = tk.Button(
-        objectsButtonsFrame,
-        text = "Dostawcy",
-        command=lambda: [
-        textChange(objectsLabel, "dostawcow"),
-        showDatabase(rootListbox=objectsList, type="single", table="deliveryMen")])
-    objectsDeliveriesButton.grid(row=0, column=2, sticky="ew")
 
     objectsDeliveryMenButton = tk.Button(
         objectsButtonsFrame,
+        text = "Dostawcy",
+        command=lambda: [
+            textChange(objectsLabel, "dostawcow"),
+            showDatabase(rootListbox=objectsList, type="single", table="deliveryMen"),
+            selectedTableFunc("dostawcy", objectsDeliveryMenButton)
+        ])
+    objectsDeliveryMenButton.grid(row=0, column=2, sticky="ew")
+
+    objectsDeliveriesButton = tk.Button(
+        objectsButtonsFrame,
         text ="Dostawy",
         command=lambda: [
-        textChange(objectsLabel, "dostaw"),
-        showDatabase(rootListbox=objectsList, type="single", table="deliveries")])
-    objectsDeliveryMenButton.grid(row=0, column=3, sticky="ew", padx=(5, 0))
+            textChange(objectsLabel, "dostaw"),
+            showDatabase(rootListbox=objectsList, type="single", table="deliveries"),
+            selectedTableFunc("dostawy", objectsDeliveriesButton)
+        ])
+    objectsDeliveriesButton.grid(row=0, column=3, sticky="ew", padx=(5, 0))
 
 
 
@@ -120,13 +132,16 @@ def graphicUserInterface(appRoot):
     objectsButtonsBelowFrame.grid(row=3, column=0, sticky="nsew", padx=10, pady=10)
     objectsButtonsBelowFrame.columnconfigure(0, weight=1)
     objectsButtonsBelowFrame.columnconfigure(1, weight=1)
-
+    from library.additionalFiles.guiFunctions import clearListbox
     objectsEmployeeInStoreButton = tk.Button(
         objectsButtonsBelowFrame,
         text="Pracownicy w sklepie",
         command=lambda: [
             textChange(objectsLabel, "pracownikow w sklepie"),
-            showDatabase(rootListbox=objectsList, type="multi", table="employeesInStore", table2="stores",pickFrame=objectsFrame)])
+            showDatabase(rootListbox=objectsList, type="multi", table="employeesInStore", table2="stores",pickFrame=objectsFrame),
+            clearListbox(objectsList),
+            selectedTableFunc("pracownicy-w-sklepie", objectsEmployeeInStoreButton)
+        ])
     objectsEmployeeInStoreButton.grid(row=0, column=0, sticky="ew", padx=(5,0))
 
     objectsDeliveryMenInStoreButton = tk.Button(
@@ -134,7 +149,10 @@ def graphicUserInterface(appRoot):
         text="Dostawcy w sklepie",
         command=lambda: [
             textChange(objectsLabel, "dostawcow w sklepie"),
-            showDatabase(rootListbox=objectsList, type="multi", table="deliveryMen", table2="stores", pickFrame=objectsFrame)])
+            showDatabase(rootListbox=objectsList, type="multi", table="deliveryMen", table2="stores", pickFrame=objectsFrame),
+            clearListbox(objectsList),
+            selectedTableFunc("dostawcy-w-sklepie", objectsDeliveryMenInStoreButton)
+        ])
     objectsDeliveryMenInStoreButton.grid(row=0, column=1, sticky="ew", padx=(5,0))
 
 
@@ -149,11 +167,14 @@ def graphicUserInterface(appRoot):
     objectsCommandButtonsFrame.columnconfigure(1, weight=1)
     objectsCommandButtonsFrame.columnconfigure(2, weight=1)
 
-
-    objectsCommandAddButton = tk.Button(objectsCommandButtonsFrame, text = "Dodaj rekord", command = lambda: newWindow("add", objectsFrame, table))
+    from library.additionalFiles import guiFunctions
+    objectsCommandAddButton = tk.Button(objectsCommandButtonsFrame, text = "Dodaj rekord", command = lambda: newWindow("add", objectsFrame, guiFunctions.selectedTableValue))
     objectsCommandAddButton.grid(row=0, column=0, sticky="ew")
 
-    objectsCommandEditButton = tk.Button(objectsCommandButtonsFrame, text = "Edytuj rekord", command = lambda: newWindow("edit", objectsFrame))
+    objectsCommandEditButton = tk.Button(objectsCommandButtonsFrame, text = "Edytuj rekord", command = lambda: [
+        newWindow("edit", objectsFrame, guiFunctions.selectedTableValue, objectsList.get(objectsList.curselection())),
+        objectsList.selection_clear(0, "end")
+    ])
     objectsCommandEditButton.grid(row=0, column=1, sticky="ew", padx=5)
 
     objectsCommandDeleteButton = tk.Button(objectsCommandButtonsFrame, text = "Usun rekord")#, command = lambda: deleteRecord())

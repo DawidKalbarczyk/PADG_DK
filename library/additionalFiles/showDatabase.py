@@ -43,10 +43,11 @@ def showDatabase(rootListbox, type, table="employeesInStore", table2=None, pickF
             columnNames = []
             dataColumns = []
 
-
+            from library.additionalFiles.translationDict import Dict
             for tuples in columns:
                 for columnName in tuples:
-                    columnNames.append(columnName.upper())
+                    displayName = Dict.get(columnName, columnName.upper())
+                    columnNames.append(displayName)
             for data in dataDatabase:
                 dataColumns.append(str(data))
 
@@ -126,10 +127,11 @@ def showDatabase(rootListbox, type, table="employeesInStore", table2=None, pickF
                 columns = cursor.fetchall()
 
                 columnNames = []
-
+                from library.additionalFiles.translationDict import Dict
                 for tuples in columns:
                     for columnName in tuples:
-                        columnNames.append(columnName.upper())
+                        displayName = Dict.get(columnName, columnName.upper())
+                        columnNames.append(displayName)
 
                 columnNames.pop(3)
                 columnNames.pop(3)
@@ -208,10 +210,11 @@ def showDatabase(rootListbox, type, table="employeesInStore", table2=None, pickF
                         columns = cursor.fetchall()
 
                         columnNames = []
-
+                        from library.additionalFiles.translationDict import Dict
                         for tuples in columns:
                             for columnName in tuples:
-                                columnNames.append(columnName.upper())
+                                displayName = Dict.get(columnName, columnName.upper())
+                                columnNames.append(displayName)
                         print(columnNames)
                         columnNames.pop(1)
                         columnNames.pop(3)
@@ -246,9 +249,11 @@ def showDatabase(rootListbox, type, table="employeesInStore", table2=None, pickF
 
                         columnNames = []
 
+                        from library.additionalFiles.translationDict import Dict
                         for tuples in columns:
                             for columnName in tuples:
-                                columnNames.append(columnName.upper())
+                                displayName = Dict.get(columnName, columnName.upper())
+                                columnNames.append(displayName)
                         print(columnNames)
                         columnNames.pop(1)
                         columnNames.pop(3)
