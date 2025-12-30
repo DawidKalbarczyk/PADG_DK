@@ -162,7 +162,6 @@ def newWindow(type, parentWindow, selectedTableValue, objectsList=None, pickFram
             windowGeneratedSQL.columnconfigure(1, weight=3)
             struct, columnNames = generateEntryFromSQL(root=windowGeneratedSQL, table=selectedTableKey,
                                                        struct=generatedStructure)
-            columnNames.pop(-1)
             sqlIndex = objectsList.get(objectsList.curselection()).split()[0]
             from library.additionalFiles.translationDict import DictReverse
             for i,name in enumerate(columnNames):
@@ -174,8 +173,7 @@ def newWindow(type, parentWindow, selectedTableValue, objectsList=None, pickFram
                 showDatabase(objectsList, showDatabaseType, selectedTableKey, store=store, pickFrame=pickFrame)
             ])
             windowEditButton.grid(row=2, column=1, sticky="ew")
-        #TODO Dodać, że jeżeli podświetlony przycisk lewy dolny lub prawy dolny to po add, edit itd aktualizacja za pomocą showDatabase
-        #TODO - teoretycznie po dodaniu,edit, i delete powinno się odświeżać ale nwm o co chodzi
+
         case "delete":
             sqlIndex = objectsList.get(objectsList.curselection()).split()[0]
             SQL = f'DELETE FROM public."{selectedTableKey}" WHERE id = {sqlIndex}'

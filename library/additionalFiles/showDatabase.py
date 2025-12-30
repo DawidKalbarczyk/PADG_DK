@@ -341,7 +341,6 @@ def showDatabase(rootListbox, type, table="employeesInStore", table2=None, pickF
 
             objectsPickOptionEndTitle = tk.Label(objectsPickFrame, text="sklepu")
             objectsPickOptionEndTitle.grid(row=1, column=2, sticky="nsew")
-            #TODO przy edycji przycisane na stałe jest STORE. zmienić zeby można było zmienić.
 
 
             cursor.close()
