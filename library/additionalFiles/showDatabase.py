@@ -1,6 +1,6 @@
 from library.engine import dbConnect
 from library.additionalFiles.guiFunctions import removeCursorSelection
-def showDatabase(rootListbox, type, table="employeesInStore", table2=None, pickFrame=None):
+def showDatabase(rootListbox, type, table="employeesInStore", table2=None, pickFrame=None, store = None):
     match type:
         case "single":
             rootListbox.delete(0, "end")
@@ -87,6 +87,75 @@ def showDatabase(rootListbox, type, table="employeesInStore", table2=None, pickF
             cursor.close()
 
         case "multi":
+            if store:
+                rootListbox.delete(0, "end")
+                conn = dbConnect()
+                cursor = conn.cursor()
+                if table == "employeesInStore":
+                    SQLcondition = f'SELECT id, "firstName","lastName",store FROM "employeesInStore" WHERE store=\'{store}\''
+                    cursor.execute(SQLcondition)
+                    dataSQL = cursor.fetchall()
+
+                    SQL = f"SELECT column_name FROM information_schema.columns WHERE table_name = 'employeesInStore'"
+                    cursor.execute(SQL)
+                    columns = cursor.fetchall()
+                    columnNames = []
+                    from library.additionalFiles.translationDict import Dict
+                    for tuples in columns:
+                        for columnName in tuples:
+                            displayName = Dict.get(columnName, columnName.upper())
+                            columnNames.append(displayName)
+                    columnNames.pop(1)
+                    columnNames.pop(3)
+                    columnNames.pop(3)
+                    columnNames.pop(3)
+                    columnNames.pop(3)
+                    columnNames.pop(3)
+                    columnNames.pop(4)
+
+                    col1, col2, col3, col4 = columnNames[0].ljust(7), columnNames[1].ljust(12), columnNames[2].ljust(15), \
+                    columnNames[3].ljust(7)
+                    rootListbox.insert("end", f"{col1} {col2} {col3} {col4}")
+
+                    for data in dataSQL:
+                        dat1, dat2, dat3, dat4 = (str(data[0]).ljust(7), str(data[1]).ljust(12),
+                                                  str(data[2]).ljust(15), str(data[3]).ljust(7))
+                        rootListbox.insert("end", f"{dat1} {dat2} {dat3} {dat4}")
+
+                elif table == "deliveryMen":
+                    SQLcondition = f'SELECT id,"firstName","lastName",store FROM "deliveryMen" WHERE store=\'{store}\''
+                    cursor.execute(SQLcondition)
+                    dataSQL = cursor.fetchall()
+
+                    SQL = f"SELECT column_name FROM information_schema.columns WHERE table_name = 'deliveryMen'"
+                    cursor.execute(SQL)
+                    columns = cursor.fetchall()
+                    columnNames = []
+                    from library.additionalFiles.translationDict import Dict
+                    for tuples in columns:
+                        for columnName in tuples:
+                            displayName = Dict.get(columnName, columnName.upper())
+                            columnNames.append(displayName)
+
+                    columnNames.pop(1)
+                    columnNames.pop(3)
+                    columnNames.pop(3)
+                    columnNames.pop(3)
+
+                    col1, col2, col3, col4 = columnNames[0].ljust(7), columnNames[1].ljust(12), columnNames[2].ljust(15), \
+                    columnNames[3].ljust(7)
+                    rootListbox.insert("end", f"{col1} {col2} {col3} {col4}")
+
+                    for data in dataSQL:
+                        dat1, dat2, dat3, dat4 = (str(data[0]).ljust(7), str(data[1]).ljust(12),
+                                                  str(data[2]).ljust(15), str(data[3]).ljust(7))
+                        rootListbox.insert("end", f"{dat1} {dat2} {dat3} {dat4}")
+
+                cursor.close()
+                removeCursorSelection(rootListbox)
+                return
+
+
             import tkinter as tk
             objectsPickFrame = tk.Frame(pickFrame)
             #objectsPickFrame.bind_all("<Button-1>",lambda event: event.widget.focus_set())
@@ -184,27 +253,16 @@ def showDatabase(rootListbox, type, table="employeesInStore", table2=None, pickF
                 return storeID
 
             #def
-
-            pickWindowButton = tk.Button(pickWindow, text="Akceptuj", font=("Courier", 12), command=lambda: pickedOption(pickWindow, pickListboxElement()))
-            pickWindowButton.grid(row=2, column=1, sticky="ew")
-
-
-            objectsPickOptionButton = tk.Button(objectsPickFrame, text="Wybierz", command=lambda: pickOptionWindow(pickWindow, pickWindowListbox))
-            objectsPickOptionButton.grid(row=1, column=1, sticky="nsew", padx=(7,10))
-
-
-            objectsPickOptionEndTitle = tk.Label(objectsPickFrame, text="sklepu")
-            objectsPickOptionEndTitle.grid(row=1, column=2, sticky="nsew")
-
             match table:
                 case "employeesInStore":
                     def pickedOption(toDestroy, element):
                         rootListbox.delete(0, tk.END)
                         cursor = dbConnect().cursor()
+                        print(f"DEBUG pickedOption: element = '{element}'")
                         SQLconditionData = f'SELECT id,"firstName","lastName",store FROM "employeesInStore" WHERE store=\'{element}\''
                         cursor.execute(SQLconditionData)
                         SQLdataBack = cursor.fetchall()
-
+                        print(SQLdataBack)
                         SQL1 = "SELECT column_name FROM information_schema.columns WHERE table_name = 'employeesInStore'"
                         cursor.execute(SQL1)
                         columns = cursor.fetchall()
@@ -223,7 +281,8 @@ def showDatabase(rootListbox, type, table="employeesInStore", table2=None, pickF
                         columnNames.pop(3)
                         columnNames.pop(3)
                         columnNames.pop(4)
-                        col1, col2, col3, col4 = columnNames[0].ljust(7), columnNames[1].ljust(12), columnNames[2].ljust(15), columnNames[3].ljust(7)
+                        col1, col2, col3, col4 = columnNames[0].ljust(7), columnNames[1].ljust(12), columnNames[
+                            2].ljust(15), columnNames[3].ljust(7)
 
                         rootListbox.insert("end", f"{col1} {col2} {col3} {col4}")
 
@@ -259,7 +318,8 @@ def showDatabase(rootListbox, type, table="employeesInStore", table2=None, pickF
                         columnNames.pop(3)
                         columnNames.pop(3)
                         columnNames.pop(3)
-                        col1, col2, col3, col4 = columnNames[0].ljust(7), columnNames[1].ljust(12), columnNames[2].ljust(15), columnNames[3].ljust(7)
+                        col1, col2, col3, col4 = columnNames[0].ljust(7), columnNames[1].ljust(12), columnNames[
+                            2].ljust(15), columnNames[3].ljust(7)
 
                         rootListbox.insert("end", f"{col1} {col2} {col3} {col4}")
                         print(SQLdataBack)
@@ -270,6 +330,18 @@ def showDatabase(rootListbox, type, table="employeesInStore", table2=None, pickF
 
                         toDestroy.withdraw()
                         cursor.close()
+
+            pickWindowButton = tk.Button(pickWindow, text="Akceptuj", font=("Courier", 12), command=lambda: pickedOption(pickWindow, pickListboxElement()))
+            pickWindowButton.grid(row=2, column=1, sticky="ew")
+
+
+            objectsPickOptionButton = tk.Button(objectsPickFrame, text="Wybierz", command=lambda: pickOptionWindow(pickWindow, pickWindowListbox))
+            objectsPickOptionButton.grid(row=1, column=1, sticky="nsew", padx=(7,10))
+
+
+            objectsPickOptionEndTitle = tk.Label(objectsPickFrame, text="sklepu")
+            objectsPickOptionEndTitle.grid(row=1, column=2, sticky="nsew")
+            #TODO przy edycji przycisane na stałe jest STORE. zmienić zeby można było zmienić.
 
 
             cursor.close()

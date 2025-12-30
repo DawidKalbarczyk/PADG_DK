@@ -1,21 +1,21 @@
 Dict = {
     "id": "ID",
-    "address": "Adres",
-    "firstName": "Imię",
-    "lastName": "Nazwisko",
-    "phoneNumber": "Numer telefonu",
-    "workedHours": "Godziny pracy",
-    "store": "Sklep",
-    "addressFrom": "Adres wysyłki",
-    "addressTo": "Adres odbioru",
-    "deliveryMan": "Dostawcy",
-    "date": "Data",
-    "distance": "Dystans [km]",
-    "age": "Wiek",
-    "salary": "Pensja",
-    "position": "Stanowisko",
-    "owner": "Właściciel",
-    "employeesNr": "Pracownicy"
+    "address": "ADRES",
+    "firstName": "IMIĘ",
+    "lastName": "NAZWISKO",
+    "phoneNumber": "NUMER TELEFONU",
+    "workedHours": "GODZINY PRACY",
+    "store": "SKLEP",
+    "addressFrom": "ADRES WYSYŁKI",
+    "addressTo": "ADRES ODBIORU",
+    "deliveryMan": "DOSTAWCY",
+    "date": "DATA",
+    "distance": "DYSTANS [km]",
+    "age": "WIEK",
+    "salary": "PENSJA",
+    "position": "STANOWISKO",
+    "owner": "WŁAŚCICIEL",
+    "employeesNr": "PRACOWNICY"
 }
 
 DictReverse = {}

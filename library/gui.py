@@ -77,9 +77,18 @@ def graphicUserInterface(appRoot):
 
     from library.additionalFiles.showDatabase import showDatabase
     from library.additionalFiles.labelTextChange import textChange
-    objectsList = tk.Listbox(objectsFrame, borderwidth=3, relief="groove")
-    objectsList.grid(row=2, column=0, sticky="new", padx=10, pady=10)
+
+    objectsListFrame = tk.Frame(objectsFrame)
+    objectsListFrame.grid(row=2, column=0, sticky="new", padx=10, pady=10)
+
+
+    objectsList = tk.Listbox(objectsListFrame, borderwidth=3, relief="groove")
+    objectsList.pack(side="left", fill="both", expand=True)
     objectsList.config(font=("Courier", 8), activestyle='none')
+
+    objectsListScrollbar = tk.Scrollbar(objectsListFrame, orient="vertical", command=objectsList.yview)
+    objectsListScrollbar.pack(side="right", fill="y")
+    objectsList.config(yscrollcommand=objectsListScrollbar.set)
 
 
     from library.additionalFiles.guiFunctions import selectedTableFunc
@@ -138,7 +147,7 @@ def graphicUserInterface(appRoot):
         text="Pracownicy w sklepie",
         command=lambda: [
             textChange(objectsLabel, "pracownikow w sklepie"),
-            showDatabase(rootListbox=objectsList, type="multi", table="employeesInStore", table2="stores",pickFrame=objectsFrame),
+            showDatabase(rootListbox=objectsList, type="multi", table="employeesInStore",pickFrame=objectsFrame),
             clearListbox(objectsList),
             selectedTableFunc("pracownicy-w-sklepie", objectsEmployeeInStoreButton)
         ])
@@ -149,7 +158,7 @@ def graphicUserInterface(appRoot):
         text="Dostawcy w sklepie",
         command=lambda: [
             textChange(objectsLabel, "dostawcow w sklepie"),
-            showDatabase(rootListbox=objectsList, type="multi", table="deliveryMen", table2="stores", pickFrame=objectsFrame),
+            showDatabase(rootListbox=objectsList, type="multi", table="deliveryMen", pickFrame=objectsFrame),
             clearListbox(objectsList),
             selectedTableFunc("dostawcy-w-sklepie", objectsDeliveryMenInStoreButton)
         ])
@@ -168,16 +177,19 @@ def graphicUserInterface(appRoot):
     objectsCommandButtonsFrame.columnconfigure(2, weight=1)
 
     from library.additionalFiles import guiFunctions
-    objectsCommandAddButton = tk.Button(objectsCommandButtonsFrame, text = "Dodaj rekord", command = lambda: newWindow("add", objectsFrame, guiFunctions.selectedTableValue))
+    objectsCommandAddButton = tk.Button(objectsCommandButtonsFrame, text = "Dodaj rekord", command = lambda: newWindow("add", objectsFrame, guiFunctions.selectedTableValue, objectsList, pickFrame=objectsFrame))
     objectsCommandAddButton.grid(row=0, column=0, sticky="ew")
 
     objectsCommandEditButton = tk.Button(objectsCommandButtonsFrame, text = "Edytuj rekord", command = lambda: [
-        newWindow("edit", objectsFrame, guiFunctions.selectedTableValue, objectsList.get(objectsList.curselection())),
+        newWindow("edit", objectsFrame, guiFunctions.selectedTableValue, objectsList, pickFrame=objectsFrame),
         objectsList.selection_clear(0, "end")
     ])
     objectsCommandEditButton.grid(row=0, column=1, sticky="ew", padx=5)
 
-    objectsCommandDeleteButton = tk.Button(objectsCommandButtonsFrame, text = "Usun rekord")#, command = lambda: deleteRecord())
+    objectsCommandDeleteButton = tk.Button(objectsCommandButtonsFrame, text = "Usun rekord", command = lambda: [
+        newWindow("delete", objectsFrame, guiFunctions.selectedTableValue, objectsList, pickFrame=objectsFrame),
+        objectsList.selection_clear(0, "end")
+    ])
     objectsCommandDeleteButton.grid(row=0, column=2, sticky="ew")
 
     objectsShowAllButton = tk.Button(objectsFrame, text = "Pokaz szczegoly")
