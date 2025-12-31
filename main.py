@@ -6,17 +6,8 @@ from library.loginInterface import login
 def main():
     root = tk.Tk()
     isLogged = login(root)
-    print(isLogged)
     if isLogged == True:
         graphicUserInterface(root)
-
-
-    SQL = "SELECT * FROM stores"
-    cursor = dbConnect().cursor()
-    cursor.execute(SQL)
-    stores = cursor.fetchall()
-    print(stores)
-
     root.mainloop()
 
 if __name__ == "__main__":
