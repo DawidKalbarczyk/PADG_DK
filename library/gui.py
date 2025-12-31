@@ -222,7 +222,7 @@ def graphicUserInterface(appRoot):
     imageMapLabel.image = imageMap
     imageMapLabel.grid(row=0, column=3)
 
-    mapFrame = tk.Frame(rightFrame, bg="yellow", borderwidth=1, relief="solid")
+    mapFrame = tk.Frame(rightFrame, borderwidth=1, relief="solid")
     mapFrame.grid(row=1, column=1, sticky="nsew", columnspan=3, pady=(1, 0))
     mapFrame.columnconfigure(0, weight=1)
     mapFrame.rowconfigure(0, weight=1)

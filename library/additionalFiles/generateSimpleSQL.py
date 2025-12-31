@@ -4,9 +4,9 @@ import tkinter as tk
 from library.additionalFiles.windowPosition import windowPos
 def generateDetailsSQL(root, table):
     window = tk.Toplevel(root)
-    window.title("Szczegoly")
+    window.title("Szczegóły")
     window.iconbitmap("assets/icons/more-info-icon.ico")
-    windowPos(root=window, windowWidth=1100, windowHeight=500)
+    windowPos(root=window, windowWidth=900, windowHeight=500)
     window.rowconfigure(0, weight=1)
     window.columnconfigure(0, weight=1)
     window.grid()
@@ -17,6 +17,7 @@ def generateDetailsSQL(root, table):
     windowFrame.rowconfigure(1, weight=0)
     windowFrame.rowconfigure(2, weight=0)
     windowFrame.grid(row=0, column=0, sticky="nsew")
+    root.protocol("WM_DELETE_WINDOW", lambda: window.destroy())
 
     windowListbox = tk.Listbox(windowFrame)
     windowListbox.grid(row=0, column=0, sticky="nsew")
@@ -38,11 +39,13 @@ def generateDetailsSQL(root, table):
     columns = cursor.fetchall()
     columns.pop(-1)
     columnNamesString = ""
+
+
     from library.additionalFiles.translationDict import Dict
     for tuples in columns:
         for columnName in tuples:
             displayName = Dict.get(columnName, columnName.upper())
-            columnNamesString += displayName.ljust(20) + "|"
+            columnNamesString += displayName.ljust(27) + "|"
     windowListbox.insert("end", f"{columnNamesString}")
 
     separator = ""
@@ -65,7 +68,7 @@ def generateDetailsSQL(root, table):
         dataWithoutPass.pop(-1)
         for d in dataWithoutPass:
             d = str(d)
-            dataString += d.ljust(20) + "|"
+            dataString += d.ljust(27) + "|"
         windowListbox.insert("end", f"{dataString}")
         separator = ""
         for _ in dataString:
@@ -84,3 +87,4 @@ def generateDetailsSQL(root, table):
     windowListbox.bind("<<ListboxSelect>>", deselectSeparators)
     conn.close()
 # TODO dodać generowanie szczegółów dla dwóch multi tablic
+# TODO dodać do bazy dla deliveries data zamówienia i data dostarczenia

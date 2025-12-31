@@ -8,13 +8,6 @@ def main():
     isLogged = login(root)
     if isLogged == True:
         graphicUserInterface(root)
-
-    SQL = "SELECT * FROM stores"
-    cursor = dbConnect().cursor()
-    cursor.execute(SQL)
-    stores = cursor.fetchall()
-
-
     root.mainloop()
 
 if __name__ == "__main__":
