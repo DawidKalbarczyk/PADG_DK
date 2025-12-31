@@ -53,6 +53,9 @@ def login(appRoot):
     loginButtonsAccept = tk.Button(loginButtonsFrame, text="Logowanie", command=lambda: get_values(loginValuesLoginValue, loginValuesPasswordValue, root))
     loginButtonsAccept.grid(row=0, column=0, padx=10, pady=10)
 
+    #Funkcjonalnosc ENTER
+    root.bind("<Return>", lambda event: get_values(loginValuesLoginValue, loginValuesPasswordValue, root))
+
     loginButtonsDeny = tk.Button(loginButtonsFrame, text="WyjdÅº", command=appRoot.destroy)
     loginButtonsDeny.grid(row=0, column=1, padx=10, pady=10)
     appRoot.wait_window(root)  # czeka az zamknie okno
