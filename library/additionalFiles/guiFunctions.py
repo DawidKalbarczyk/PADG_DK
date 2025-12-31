@@ -13,12 +13,14 @@ def clearListbox(listbox):
 
 
 selectedTableValue = ""
+simpleSQLGenVal = ""
 lastButtonClicked = None
 
 
 def selectedTableFunc(param, button):
     global selectedTableValue
     global lastButtonClicked
+    global simpleSQLGenVal
 
     currentBackgroundColor = button.cget("bg")
 
@@ -27,6 +29,7 @@ def selectedTableFunc(param, button):
     if currentBackgroundColor != "yellow":
         button.config(bg="yellow")
         selectedTableValue = param
+        simpleSQLGenVal = param
         lastButtonClicked = button
     else:
         pass
@@ -34,12 +37,16 @@ def selectedTableFunc(param, button):
     match param:
         case "sklepy":
             selectedTableValue = "sklepy"
+            simpleSQLGenVal = "stores"
         case "pracownicy":
             selectedTableValue = "pracownicy"
+            simpleSQLGenVal = "employeesInStore"
         case "dostawcy":
             selectedTableValue = "dostawcy"
+            simpleSQLGenVal = "deliveryMen"
         case "dostawy":
             selectedTableValue = "dostawy"
+            simpleSQLGenVal = "deliveries"
         case "pracownicy-w-sklepie":
             selectedTableValue = "pracownicy-w-sklepie"
         case "dostawcy-w-sklepie":

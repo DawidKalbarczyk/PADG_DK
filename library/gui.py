@@ -192,7 +192,11 @@ def graphicUserInterface(appRoot):
     ])
     objectsCommandDeleteButton.grid(row=0, column=2, sticky="ew")
 
-    objectsShowAllButton = tk.Button(objectsFrame, text = "Pokaz szczegoly")
+    from library.additionalFiles.generateSimpleSQL import generateDetailsSQL
+    objectsShowAllButton = tk.Button(
+        objectsFrame,
+        text = "Pokaz szczegoly",
+        command = lambda: generateDetailsSQL(root=objectsList, table=guiFunctions.simpleSQLGenVal))
     objectsShowAllButton.grid(row=6, column=0, sticky="nsew", padx=10, pady=10)
 
     rightFrame = tk.Frame(root, borderwidth=1, relief="solid" )
