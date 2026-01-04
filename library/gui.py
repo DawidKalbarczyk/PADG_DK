@@ -1,6 +1,8 @@
 import tkinter as tk
 from library.additionalFiles.windowPosition import windowPos
 from library.additionalFiles.closeWholeProgram import closeProgram
+
+Map = None
 def graphicUserInterface(appRoot):
 
     appRoot.withdraw()
@@ -238,7 +240,13 @@ def graphicUserInterface(appRoot):
 
     from library.additionalFiles.mapConnection import mapConn
 
+    global Map
     Map = mapConn(root=mapFrame)
+
+    # map_widget = tkintermapview.TkinterMapView(ramkaMapa, width=1025, height=600, corner_radius=0)
+    # map_widget.set_position(52.0, 21.0)
+    # map_widget.set_zoom(6)
+    # map_widget.grid(row=0, column=0)
 
 
 """

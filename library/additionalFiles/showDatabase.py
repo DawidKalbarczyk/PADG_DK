@@ -1,6 +1,16 @@
 from library.engine import dbConnect
 from library.additionalFiles.guiFunctions import removeCursorSelection
+
+
+futureSQLIndex = ""
+
+
+def getSQLIndex():
+    return futureSQLIndex
+
 def showDatabase(rootListbox, type, table="employeesInStore", table2=None, pickFrame=None, store = None):
+
+
     match type:
         case "single":
             rootListbox.delete(0, "end")
@@ -11,6 +21,10 @@ def showDatabase(rootListbox, type, table="employeesInStore", table2=None, pickF
             columns = cursor.fetchall()
             SQLdata = ""
 
+            ###### MARKER ####
+            from library.additionalFiles.markerModule import markerSingleFunc
+            markerSingleFunc(table)
+            ###### MARKER ####
 
             match table:
                 case "stores":
@@ -92,7 +106,7 @@ def showDatabase(rootListbox, type, table="employeesInStore", table2=None, pickF
                 conn = dbConnect()
                 cursor = conn.cursor()
                 if table == "employeesInStore":
-                    SQLcondition = f'SELECT id, "firstName","lastName",store FROM "employeesInStore" WHERE store=\'{store}\''
+                    SQLcondition = f'SELECT id, "firstName","lastName",store FROM "employeesInStore" WHERE store=\'{store}\' ORDER BY id'
                     cursor.execute(SQLcondition)
                     dataSQL = cursor.fetchall()
 
@@ -123,7 +137,7 @@ def showDatabase(rootListbox, type, table="employeesInStore", table2=None, pickF
                         rootListbox.insert("end", f"{dat1} {dat2} {dat3} {dat4}")
 
                 elif table == "deliveryMen":
-                    SQLcondition = f'SELECT id,"firstName","lastName",store FROM "deliveryMen" WHERE store=\'{store}\''
+                    SQLcondition = f'SELECT id,"firstName","lastName",store FROM "deliveryMen" WHERE store=\'{store}\' ORDER BY id'
                     cursor.execute(SQLcondition)
                     dataSQL = cursor.fetchall()
 
@@ -257,9 +271,11 @@ def showDatabase(rootListbox, type, table="employeesInStore", table2=None, pickF
                 case "employeesInStore":
                     def pickedOption(toDestroy, element):
                         rootListbox.delete(0, tk.END)
+                        global futureSQLIndex
+                        futureSQLIndex = pickListboxElement()
                         cursor = dbConnect().cursor()
                         print(f"DEBUG pickedOption: element = '{element}'")
-                        SQLconditionData = f'SELECT id,"firstName","lastName",store FROM "employeesInStore" WHERE store=\'{element}\''
+                        SQLconditionData = f'SELECT id,"firstName","lastName",store FROM "employeesInStore" WHERE store=\'{element}\' ORDER BY id'
                         cursor.execute(SQLconditionData)
                         SQLdataBack = cursor.fetchall()
                         print(SQLdataBack)
@@ -297,8 +313,11 @@ def showDatabase(rootListbox, type, table="employeesInStore", table2=None, pickF
                 case "deliveryMen":
                     def pickedOption(toDestroy, element):
                         rootListbox.delete(0, tk.END)
+                        global futureSQLIndex
+                        futureSQLIndex = pickListboxElement()
+                        print(futureSQLIndex)
                         cursor = dbConnect().cursor()
-                        SQLconditionData = f'SELECT id,"firstName","lastName",store FROM "deliveryMen" WHERE store=\'{element}\''
+                        SQLconditionData = f'SELECT id,"firstName","lastName",store FROM "deliveryMen" WHERE store=\'{element}\' ORDER BY id'
                         cursor.execute(SQLconditionData)
                         SQLdataBack = cursor.fetchall()
 
@@ -341,6 +360,8 @@ def showDatabase(rootListbox, type, table="employeesInStore", table2=None, pickF
 
             objectsPickOptionEndTitle = tk.Label(objectsPickFrame, text="sklepu")
             objectsPickOptionEndTitle.grid(row=1, column=2, sticky="nsew")
+
+
 
 
             cursor.close()

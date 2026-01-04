@@ -49,5 +49,7 @@ def selectedTableFunc(param, button):
             simpleSQLGenVal = "deliveries"
         case "pracownicy-w-sklepie":
             selectedTableValue = "pracownicy-w-sklepie"
+            simpleSQLGenVal = "pracownicy-w-sklepie"
         case "dostawcy-w-sklepie":
             selectedTableValue = "dostawcy-w-sklepie"
+            simpleSQLGenVal = "dostawcy-w-sklepie"
