@@ -90,6 +90,7 @@ def markerSingleFunc(table):
 
 #TODO dodać obsługę dodawania dystansu na podstawie markerów????
 #TODO dodać obsługę markerów dla tabel z warunkami
+#TODO dodać zoom przy naciśnięciu dwukrotnym na skróconą tabelę w GUI
 def scrapFunc(searchData):
     import requests
     from bs4 import BeautifulSoup

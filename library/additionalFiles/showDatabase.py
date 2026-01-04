@@ -9,7 +9,10 @@ def getSQLIndex():
     return futureSQLIndex
 
 def showDatabase(rootListbox, type, table="employeesInStore", table2=None, pickFrame=None, store = None):
-
+    from library.gui import Map
+    Map.delete_all_marker()
+    Map.delete_all_path()
+    Map.update()
 
     match type:
         case "single":
