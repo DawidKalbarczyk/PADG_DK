@@ -17,7 +17,7 @@ def generateDetailsSQL(root, table):
     windowFrame.rowconfigure(1, weight=0)
     windowFrame.rowconfigure(2, weight=0)
     windowFrame.grid(row=0, column=0, sticky="nsew")
-    root.protocol("WM_DELETE_WINDOW", lambda: window.destroy())
+    window.protocol("WM_DELETE_WINDOW", lambda: window.destroy())
 
     windowListbox = tk.Listbox(windowFrame)
     windowListbox.grid(row=0, column=0, sticky="nsew")
@@ -28,7 +28,7 @@ def generateDetailsSQL(root, table):
     windowListbox.config(yscrollcommand=windowListboxScrollbarY.set)
 
     windowListboxScrollbarX = tk.Scrollbar(windowFrame, orient="horizontal", command=windowListbox.xview)
-    windowListboxScrollbarX.grid(row=1, column=0, sticky="ew")
+    windowListboxScrollbarX.grid(row=2, column=0, sticky="ew")
     windowListbox.config(xscrollcommand=windowListboxScrollbarX.set)
 
     from library.engine import dbConnect
