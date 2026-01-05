@@ -1,9 +1,13 @@
+markers = []
 def markerSingleFunc(table):
     from library.engine import dbConnect
     conn = dbConnect()
     cursor = conn.cursor()
     circleColor = "darkred"
     outsideColor = "red"
+    from library.gui import Map
+    Map.delete_all_marker()
+    global markers
     markers = []
     paths = []
     if table != "deliveries":
@@ -85,7 +89,8 @@ def markerSingleFunc(table):
                 path.hide()
             paths.append(path)
 
-
+    for m in markers:
+        print(m.text)
     conn.close()
 
 #TODO dodać obsługę dodawania dystansu na podstawie markerów????

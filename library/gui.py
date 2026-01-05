@@ -92,6 +92,22 @@ def graphicUserInterface(appRoot):
     objectsListScrollbar.pack(side="right", fill="y")
     objectsList.config(yscrollcommand=objectsListScrollbar.set)
 
+    def select(uselessEvent):
+        from library.additionalFiles.markerModule import markers
+        from library import gui
+        if objectsList.curselection():
+            idx = objectsList.curselection()[0]
+            for m in markers:
+                print(type(m.text))
+                if m.text == idx:
+                    print("Działa!")
+                    if (m.position[0] == 0.0 or m.position[1] == 0.0):
+                        pass
+                    else:
+                        gui.Map.set_position(m.position[0], m.position[1])
+                        gui.Map.set_zoom(9)
+
+    objectsList.bind("<<ListboxSelect>>", select)
 
     from library.additionalFiles.guiFunctions import selectedTableFunc
     #from library.additionalFiles import guiFunctions
@@ -247,6 +263,10 @@ def graphicUserInterface(appRoot):
     # map_widget.set_position(52.0, 21.0)
     # map_widget.set_zoom(6)
     # map_widget.grid(row=0, column=0)
+
+
+
+
 
 
 """

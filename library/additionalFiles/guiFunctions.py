@@ -5,7 +5,8 @@ def removeCursorSelection(listbox):
             listbox.after(1, lambda: listbox.selection_clear(0))
 
 
-    listbox.bind("<<ListboxSelect>>", deselect)
+    listbox.bind("<<ListboxSelect>>", deselect, add="+")
+
 
 def clearListbox(listbox):
     listbox.delete(0, "end")
