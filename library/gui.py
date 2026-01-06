@@ -99,8 +99,11 @@ def graphicUserInterface(appRoot):
             idx = objectsList.curselection()[0]
             for m in markers:
                 print(type(m.text))
-                if m.text == idx:
+                print("CCC", m.text)
+                print("DDDD", idx)
+                if str(m.text) == str(idx):
                     print("Działa!")
+# TODO łapie idx, a powinno unikalne wartosci dla kazdej tabeli
                     if (m.position[0] == 0.0 or m.position[1] == 0.0):
                         pass
                     else:
