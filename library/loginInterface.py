@@ -56,7 +56,7 @@ def login(appRoot):
     #Funkcjonalnosc ENTER
     root.bind("<Return>", lambda event: get_values(loginValuesLoginValue, loginValuesPasswordValue, root))
 
-    loginButtonsDeny = tk.Button(loginButtonsFrame, text="WyjdÅº", command=appRoot.destroy)
+    loginButtonsDeny = tk.Button(loginButtonsFrame, text="Wyjdz", command=appRoot.destroy)
     loginButtonsDeny.grid(row=0, column=1, padx=10, pady=10)
     appRoot.wait_window(root)  # czeka az zamknie okno
     return allowedToLogin
