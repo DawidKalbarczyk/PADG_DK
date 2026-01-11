@@ -43,20 +43,22 @@ def newWindow(type, parentWindow, selectedTableValue, objectsList=None, pickFram
                 selectedTableKey = "employeesInStore"
                 window.deiconify()
                 showDatabaseType = "multi"
+                from library.additionalFiles.showDatabase import getSQLIndex
                 if objectsList.size() > 1:
                     store = objectsList.get(1).split()[-1]
                 else:
-                    messagebox.showinfo("Informacja", "Brak rekordów do pokazania. Dodaj rekord w podstawowej tabeli.")
+                    store = getSQLIndex()
 
 
             case "dostawcy-w-sklepie":
                 selectedTableKey = "deliveryMen"
                 window.deiconify()
                 showDatabaseType = "multi"
+                from library.additionalFiles.showDatabase import getSQLIndex
                 if objectsList.size() > 1:
                     store = objectsList.get(1).split()[-1]
                 else:
-                    messagebox.showinfo("Informacja", "Brak rekordów do pokazania. Dodaj rekord w podstawowej tabeli.")
+                    store = getSQLIndex()
 
 
 
@@ -141,12 +143,17 @@ def newWindow(type, parentWindow, selectedTableValue, objectsList=None, pickFram
             windowGeneratedSQL.columnconfigure(0, weight=1)
             windowGeneratedSQL.columnconfigure(1, weight=3)
             struct, columnNames = generateEntryFromSQL(root=windowGeneratedSQL, table=selectedTableKey, struct=generatedStructure)
+            if showDatabaseType == "multi":
+                if struct:
+                    label, entry = struct[-1]
+                    entry.insert(0, store)
+                    label.grid_remove()
+                    entry.grid_remove()
             columnNamesString = ""
             for columnName in columnNames:
                 columnNamesString += '"' + columnName + '", '
             columnNamesString = columnNamesString[:-2]
             from library.additionalFiles.showDatabase import showDatabase
-
             windowAddButton = tk.Button(windowFrame, text = "Dodaj uzytkownika", command = lambda: [
                 addUser(window, struct, selectedTableKey, columnNamesString),
                 showDatabase(objectsList, showDatabaseType, selectedTableKey, store=store, pickFrame=pickFrame)
@@ -162,6 +169,13 @@ def newWindow(type, parentWindow, selectedTableValue, objectsList=None, pickFram
             windowGeneratedSQL.columnconfigure(1, weight=3)
             struct, columnNames = generateEntryFromSQL(root=windowGeneratedSQL, table=selectedTableKey,
                                                        struct=generatedStructure)
+            if showDatabaseType == "multi":
+                columnNames.pop(-1)
+                if struct:
+                    label, entry = struct[-1]
+                    entry.insert(0, store)
+                    label.grid_remove()
+                    entry.grid_remove()
             sqlIndex = objectsList.get(objectsList.curselection()).split()[0]
             from library.additionalFiles.translationDict import DictReverse
             for i,name in enumerate(columnNames):
@@ -190,7 +204,8 @@ def newWindow(type, parentWindow, selectedTableValue, objectsList=None, pickFram
             else:
                 window.destroy()
                 return
-            messagebox.showinfo("Informacja", f"Usunięto rekord o ID: {sqlIndex}")
+            messagebox.showinfo("Informacja", f"Usunięto rekord o ID: {sqlIndex}.")
+
 def editUser(root, struct, table, columnNames, sqlIndex):
     infoToSQL = []
     for label, entry in struct:
@@ -211,9 +226,6 @@ def editUser(root, struct, table, columnNames, sqlIndex):
     conn.close()
     root.destroy()
 
-    # windowAddButton = tk.Button(windowFrame, text="Dodaj uzytkownika",
-            #                             command=lambda: addUser(window, struct, selectedTableKey, columnNamesString))
-            # windowAddButton.grid(row=2, column=1, sticky="ew")
 
 def generateEntryFromSQL(root,table, struct):
     conn = dbConnect()
@@ -265,3 +277,6 @@ def addUser(root, struct, table, columnNamesString):
     conn.commit()
     conn.close()
     root.destroy()
+    from library import gui
+    gui.Map.set_position(52.20, 19.03)
+    gui.Map.set_zoom(6)
