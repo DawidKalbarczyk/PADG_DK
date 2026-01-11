@@ -113,6 +113,7 @@ def showDatabase(rootListbox, type, table="employeesInStore", table2=None, pickF
 
 
                 if table == "employeesInStore":
+                    markerSingleFunc("employeesInStore", f"store='{store}'")
                     SQLcondition = f'SELECT id, "firstName","lastName",store FROM "employeesInStore" WHERE store=\'{store}\' ORDER BY id'
                     cursor.execute(SQLcondition)
                     dataSQL = cursor.fetchall()
@@ -144,6 +145,7 @@ def showDatabase(rootListbox, type, table="employeesInStore", table2=None, pickF
                         rootListbox.insert("end", f"{dat1} {dat2} {dat3} {dat4}")
 
                 elif table == "deliveryMen":
+                    markerSingleFunc("deliveryMen", f"store='{store}'")
                     SQLcondition = f'SELECT id,"firstName","lastName",store FROM "deliveryMen" WHERE store=\'{store}\' ORDER BY id'
                     cursor.execute(SQLcondition)
                     dataSQL = cursor.fetchall()
