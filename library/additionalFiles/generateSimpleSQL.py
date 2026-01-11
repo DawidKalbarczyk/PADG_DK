@@ -34,50 +34,107 @@ def generateDetailsSQL(root, table):
     from library.engine import dbConnect
     conn = dbConnect()
     cursor = conn.cursor()
-    SQLColumns = f"SELECT column_name FROM information_schema.columns WHERE table_name = '{table}';"
-    cursor.execute(SQLColumns)
-    columns = cursor.fetchall()
-    columns.pop(-1)
-    columnNamesString = ""
+
+    if table != "pracownicy-w-sklepie" and table != "dostawcy-w-sklepie":
+
+        SQLColumns = f"SELECT column_name FROM information_schema.columns WHERE table_name = '{table}';"
+        cursor.execute(SQLColumns)
+        columns = cursor.fetchall()
+        if table == "employeesInStore":
+            columns.pop(-1)
+        columnNamesString = ""
 
 
-    from library.additionalFiles.translationDict import Dict
-    for tuples in columns:
-        for columnName in tuples:
-            displayName = Dict.get(columnName, columnName.upper())
-            columnNamesString += displayName.ljust(27) + "|"
-    windowListbox.insert("end", f"{columnNamesString}")
+        from library.additionalFiles.translationDict import Dict
+        for tuples in columns:
+            for columnName in tuples:
+                displayName = Dict.get(columnName, columnName.upper())
+                columnNamesString += displayName.ljust(27) + "|"
+        windowListbox.insert("end", f"{columnNamesString}")
 
-    separator = ""
-    for _ in columnNamesString:
-        separator += "-"
-
-    windowListbox.insert("end", f"{separator}")
-
-    SQLData = f'SELECT * FROM "{table}";'
-    cursor.execute(SQLData)
-    dataSQL = cursor.fetchall()
-    dataSQL.pop(-1)
-
-    separatorIDs = [0,1]
-    for data in dataSQL:
-        dataString = ""
-        dataWithoutPass = []
-        for d in data:
-            dataWithoutPass.append(d)
-        dataWithoutPass.pop(-1)
-        for d in dataWithoutPass:
-            d = str(d)
-            dataString += d.ljust(27) + "|"
-        windowListbox.insert("end", f"{dataString}")
         separator = ""
-        for _ in dataString:
+        for _ in columnNamesString:
             separator += "-"
-            separatorIDs.append(windowListbox.size())
 
         windowListbox.insert("end", f"{separator}")
-        #dat1, dat2, dat3, dat4 = (str(data[0]).ljust(7), str(data[1]).ljust(12),
-         #                         str(data[2]).ljust(15), str(data[3]).ljust(7))
+
+        SQLData = f'SELECT * FROM "{table}" ORDER BY id;'
+        cursor.execute(SQLData)
+        dataSQL = cursor.fetchall()
+
+        separatorIDs = [0,1]
+        for data in dataSQL:
+            dataString = ""
+            dataWithoutPass = []
+            for d in data:
+                dataWithoutPass.append(d)
+            if table == "employeesInStore":
+                dataWithoutPass.pop(-1)
+            for d in dataWithoutPass:
+                d = str(d)
+                dataString += d.ljust(27) + "|"
+            windowListbox.insert("end", f"{dataString}")
+            separator = ""
+            for _ in dataString:
+                separator += "-"
+                separatorIDs.append(windowListbox.size())
+
+            windowListbox.insert("end", f"{separator}")
+            #dat1, dat2, dat3, dat4 = (str(data[0]).ljust(7), str(data[1]).ljust(12),
+             #                         str(data[2]).ljust(15), str(data[3]).ljust(7))
+    elif table == "pracownicy-w-sklepie" or table == "dostawcy-w-sklepie":
+
+        from library.additionalFiles.showDatabase import getSQLIndex
+        if table == "pracownicy-w-sklepie":
+            table = "employeesInStore"
+            print(getSQLIndex())
+
+        elif table == "dostawcy-w-sklepie":
+            table = "deliveryMen"
+            print(getSQLIndex())
+
+        SQLColumns = f"SELECT column_name FROM information_schema.columns WHERE table_name = '{table}';"
+        cursor.execute(SQLColumns)
+        columns = cursor.fetchall()
+        if table == "employeesInStore":
+            columns.pop(-1)
+        columnNamesString = ""
+
+        from library.additionalFiles.translationDict import Dict
+        for tuples in columns:
+            for columnName in tuples:
+                displayName = Dict.get(columnName, columnName.upper())
+                columnNamesString += displayName.ljust(30) + "|"
+        windowListbox.insert("end", f"{columnNamesString}")
+
+        separator = ""
+        for _ in columnNamesString:
+            separator += "-"
+
+        windowListbox.insert("end", f"{separator}")
+
+        SQLData = f'SELECT * FROM "{table}" WHERE store=\'{getSQLIndex()}\' ORDER BY id;'
+        cursor.execute(SQLData)
+        dataSQL = cursor.fetchall()
+
+        separatorIDs = [0, 1]
+        for data in dataSQL:
+            dataString = ""
+            dataWithoutPass = []
+            for d in data:
+                dataWithoutPass.append(d)
+            if table == "employeesInStore":
+                dataWithoutPass.pop(-1)
+            for d in dataWithoutPass:
+                d = str(d)
+                dataString += d.ljust(30) + "|"
+            windowListbox.insert("end", f"{dataString}")
+            separator = ""
+            for _ in dataString:
+                separator += "-"
+                separatorIDs.append(windowListbox.size())
+
+            windowListbox.insert("end", f"{separator}")
 
     def deselectSeparators(uselessEvent):
         tempSelection = windowListbox.curselection()
@@ -86,5 +143,3 @@ def generateDetailsSQL(root, table):
                 windowListbox.after(1, lambda index = idx: windowListbox.selection_clear(index))  ##
     windowListbox.bind("<<ListboxSelect>>", deselectSeparators)
     conn.close()
-# TODO dodać generowanie szczegółów dla dwóch multi tablic
-# TODO dodać do bazy dla deliveries data zamówienia i data dostarczenia

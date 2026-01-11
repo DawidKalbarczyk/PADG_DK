@@ -1,6 +1,8 @@
 import tkinter as tk
 from library.additionalFiles.windowPosition import windowPos
 from library.additionalFiles.closeWholeProgram import closeProgram
+
+Map = None
 def graphicUserInterface(appRoot):
 
     appRoot.withdraw()
@@ -90,6 +92,31 @@ def graphicUserInterface(appRoot):
     objectsListScrollbar.pack(side="right", fill="y")
     objectsList.config(yscrollcommand=objectsListScrollbar.set)
 
+    def select(uselessEvent):
+        from library.additionalFiles.markerModule import markers
+        from library import gui
+
+        if objectsList.curselection():
+            zoom = 9
+            keyVal = objectsList.curselection()[0]
+            import library.additionalFiles.guiFunctions
+            if guiFunctions.simpleSQLGenVal == "employeesInStore" or guiFunctions.simpleSQLGenVal == "pracownicy-w-sklepie":
+                keyVal = objectsList.get(keyVal).split()[2]
+            elif guiFunctions.simpleSQLGenVal == "deliveryMen" or guiFunctions.simpleSQLGenVal == "dostawcy-w-sklepie":
+                keyVal = objectsList.get(keyVal).split()[2]
+            else:
+                keyVal=objectsList.get(keyVal).split()[0]
+
+
+            for m in markers:
+                if str(m.text) == str(keyVal):
+                    if (m.position[0] == 0.0 or m.position[1] == 0.0):
+                        pass
+                    else:
+                        gui.Map.set_position(m.position[0], m.position[1])
+                        gui.Map.set_zoom(zoom)
+
+    objectsList.bind("<<ListboxSelect>>", select)
 
     from library.additionalFiles.guiFunctions import selectedTableFunc
     #from library.additionalFiles import guiFunctions
@@ -165,9 +192,6 @@ def graphicUserInterface(appRoot):
     objectsDeliveryMenInStoreButton.grid(row=0, column=1, sticky="ew", padx=(5,0))
 
 
-
-
-
     from library.additionalFiles.newWindow import newWindow
 
     objectsCommandButtonsFrame = tk.Frame(objectsFrame)
@@ -238,7 +262,17 @@ def graphicUserInterface(appRoot):
 
     from library.additionalFiles.mapConnection import mapConn
 
+    global Map
     Map = mapConn(root=mapFrame)
+
+    # map_widget = tkintermapview.TkinterMapView(ramkaMapa, width=1025, height=600, corner_radius=0)
+    # map_widget.set_position(52.0, 21.0)
+    # map_widget.set_zoom(6)
+    # map_widget.grid(row=0, column=0)
+
+
+
+
 
 
 """
