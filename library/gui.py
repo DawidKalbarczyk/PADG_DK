@@ -95,20 +95,26 @@ def graphicUserInterface(appRoot):
     def select(uselessEvent):
         from library.additionalFiles.markerModule import markers
         from library import gui
+
         if objectsList.curselection():
-            idx = objectsList.curselection()[0]
+            zoom = 9
+            keyVal = objectsList.curselection()[0]
+            import library.additionalFiles.guiFunctions
+            if guiFunctions.simpleSQLGenVal == "employeesInStore" or guiFunctions.simpleSQLGenVal == "pracownicy-w-sklepie":
+                keyVal = objectsList.get(keyVal).split()[2]
+            elif guiFunctions.simpleSQLGenVal == "deliveryMen" or guiFunctions.simpleSQLGenVal == "dostawcy-w-sklepie":
+                keyVal = objectsList.get(keyVal).split()[2]
+            else:
+                keyVal=objectsList.get(keyVal).split()[0]
+
+
             for m in markers:
-                print(type(m.text))
-                print("CCC", m.text)
-                print("DDDD", idx)
-                if str(m.text) == str(idx):
-                    print("Działa!")
-# TODO łapie idx, a powinno unikalne wartosci dla kazdej tabeli
+                if str(m.text) == str(keyVal):
                     if (m.position[0] == 0.0 or m.position[1] == 0.0):
                         pass
                     else:
                         gui.Map.set_position(m.position[0], m.position[1])
-                        gui.Map.set_zoom(9)
+                        gui.Map.set_zoom(zoom)
 
     objectsList.bind("<<ListboxSelect>>", select)
 
@@ -184,9 +190,6 @@ def graphicUserInterface(appRoot):
             selectedTableFunc("dostawcy-w-sklepie", objectsDeliveryMenInStoreButton)
         ])
     objectsDeliveryMenInStoreButton.grid(row=0, column=1, sticky="ew", padx=(5,0))
-
-
-
 
 
     from library.additionalFiles.newWindow import newWindow

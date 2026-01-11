@@ -104,7 +104,7 @@ def generateDetailsSQL(root, table):
         for tuples in columns:
             for columnName in tuples:
                 displayName = Dict.get(columnName, columnName.upper())
-                columnNamesString += displayName.ljust(27) + "|"
+                columnNamesString += displayName.ljust(30) + "|"
         windowListbox.insert("end", f"{columnNamesString}")
 
         separator = ""
@@ -127,7 +127,7 @@ def generateDetailsSQL(root, table):
                 dataWithoutPass.pop(-1)
             for d in dataWithoutPass:
                 d = str(d)
-                dataString += d.ljust(27) + "|"
+                dataString += d.ljust(30) + "|"
             windowListbox.insert("end", f"{dataString}")
             separator = ""
             for _ in dataString:

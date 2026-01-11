@@ -23,6 +23,7 @@ def selectedTableFunc(param, button):
     global lastButtonClicked
     global simpleSQLGenVal
 
+
     currentBackgroundColor = button.cget("bg")
 
     if lastButtonClicked is not None and lastButtonClicked != button:
@@ -54,3 +55,7 @@ def selectedTableFunc(param, button):
         case "dostawcy-w-sklepie":
             selectedTableValue = "dostawcy-w-sklepie"
             simpleSQLGenVal = "dostawcy-w-sklepie"
+
+    from library import gui
+    gui.Map.set_position(52.20, 19.03)
+    gui.Map.set_zoom(6)

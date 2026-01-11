@@ -108,6 +108,10 @@ def showDatabase(rootListbox, type, table="employeesInStore", table2=None, pickF
                 rootListbox.delete(0, "end")
                 conn = dbConnect()
                 cursor = conn.cursor()
+
+                from library.additionalFiles.markerModule import markerSingleFunc
+
+
                 if table == "employeesInStore":
                     SQLcondition = f'SELECT id, "firstName","lastName",store FROM "employeesInStore" WHERE store=\'{store}\' ORDER BY id'
                     cursor.execute(SQLcondition)
@@ -277,11 +281,11 @@ def showDatabase(rootListbox, type, table="employeesInStore", table2=None, pickF
                         global futureSQLIndex
                         futureSQLIndex = pickListboxElement()
                         cursor = dbConnect().cursor()
-                        print(f"DEBUG pickedOption: element = '{element}'")
+
                         SQLconditionData = f'SELECT id,"firstName","lastName",store FROM "employeesInStore" WHERE store=\'{element}\' ORDER BY id'
                         cursor.execute(SQLconditionData)
                         SQLdataBack = cursor.fetchall()
-                        print(SQLdataBack)
+
                         SQL1 = "SELECT column_name FROM information_schema.columns WHERE table_name = 'employeesInStore'"
                         cursor.execute(SQL1)
                         columns = cursor.fetchall()
@@ -292,7 +296,7 @@ def showDatabase(rootListbox, type, table="employeesInStore", table2=None, pickF
                             for columnName in tuples:
                                 displayName = Dict.get(columnName, columnName.upper())
                                 columnNames.append(displayName)
-                        print(columnNames)
+
                         columnNames.pop(1)
                         columnNames.pop(3)
                         columnNames.pop(3)
@@ -310,6 +314,9 @@ def showDatabase(rootListbox, type, table="employeesInStore", table2=None, pickF
                                                       str(data[2]).ljust(15), str(data[3]).ljust(7))
                             rootListbox.insert("end", f"{dat1} {dat2} {dat3} {dat4}")
 
+                        from library.additionalFiles.markerModule import markerSingleFunc
+                        markerSingleFunc("employeesInStore", f"store='{element}'")
+
                         toDestroy.withdraw()
                         cursor.close()
 
@@ -318,7 +325,7 @@ def showDatabase(rootListbox, type, table="employeesInStore", table2=None, pickF
                         rootListbox.delete(0, tk.END)
                         global futureSQLIndex
                         futureSQLIndex = pickListboxElement()
-                        print(futureSQLIndex)
+
                         cursor = dbConnect().cursor()
                         SQLconditionData = f'SELECT id,"firstName","lastName",store FROM "deliveryMen" WHERE store=\'{element}\' ORDER BY id'
                         cursor.execute(SQLconditionData)
@@ -335,7 +342,8 @@ def showDatabase(rootListbox, type, table="employeesInStore", table2=None, pickF
                             for columnName in tuples:
                                 displayName = Dict.get(columnName, columnName.upper())
                                 columnNames.append(displayName)
-                        print(columnNames)
+
+
                         columnNames.pop(1)
                         columnNames.pop(3)
                         columnNames.pop(3)
@@ -344,12 +352,13 @@ def showDatabase(rootListbox, type, table="employeesInStore", table2=None, pickF
                             2].ljust(15), columnNames[3].ljust(7)
 
                         rootListbox.insert("end", f"{col1} {col2} {col3} {col4}")
-                        print(SQLdataBack)
+
                         for data in SQLdataBack:
                             dat1, dat2, dat3, dat4 = (str(data[0]).ljust(7), str(data[1]).ljust(12),
                                                       str(data[2]).ljust(15), str(data[3]).ljust(7))
                             rootListbox.insert("end", f"{dat1} {dat2} {dat3} {dat4}")
-
+                        from library.additionalFiles.markerModule import markerSingleFunc
+                        markerSingleFunc("deliveryMen", f"store='{element}'")
                         toDestroy.withdraw()
                         cursor.close()
 

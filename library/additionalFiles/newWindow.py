@@ -204,7 +204,8 @@ def newWindow(type, parentWindow, selectedTableValue, objectsList=None, pickFram
             else:
                 window.destroy()
                 return
-            messagebox.showinfo("Informacja", f"Usunięto rekord o ID: {sqlIndex}")
+            messagebox.showinfo("Informacja", f"Usunięto rekord o ID: {sqlIndex}.")
+
 def editUser(root, struct, table, columnNames, sqlIndex):
     infoToSQL = []
     for label, entry in struct:
@@ -276,3 +277,6 @@ def addUser(root, struct, table, columnNamesString):
     conn.commit()
     conn.close()
     root.destroy()
+    from library import gui
+    gui.Map.set_position(52.20, 19.03)
+    gui.Map.set_zoom(6)

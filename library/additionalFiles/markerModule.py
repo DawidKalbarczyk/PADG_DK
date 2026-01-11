@@ -1,5 +1,6 @@
 markers = []
-def markerSingleFunc(table):
+paths = []
+def markerSingleFunc(table, condition=None):
     from library.engine import dbConnect
     conn = dbConnect()
     cursor = conn.cursor()
@@ -8,22 +9,27 @@ def markerSingleFunc(table):
     from library.gui import Map
     Map.delete_all_marker()
     global markers
+    global paths
     markers = []
     paths = []
     if table != "deliveries":
         if table == "stores":
-            SQLmarkerData = f'SELECT id,"address" FROM "{table}";'
+            SQLmarkerData = f'SELECT id,"address" FROM "{table}"'
             circleColor = "darkred"
             outsideColor = "red"
 
         elif table == "deliveryMen":
-            SQLmarkerData = f'SELECT "lastName","address" FROM "{table}";'
+            SQLmarkerData = f'SELECT "lastName","address" FROM "{table}"'
             circleColor = "#a86b32"
             outsideColor = "#a87532"
         elif table == "employeesInStore":
-            SQLmarkerData = f'SELECT "lastName","address" FROM "{table}";'
+            SQLmarkerData = f'SELECT "lastName","address" FROM "{table}"'
             circleColor = "#2f57ad"
             outsideColor = "#658adb"
+
+        if condition:
+            SQLmarkerData += f' WHERE {condition}'
+        SQLmarkerData += 'ORDER BY id;'
         cursor.execute(SQLmarkerData)
         results = cursor.fetchall()
         names = []
@@ -32,7 +38,7 @@ def markerSingleFunc(table):
             n = row[0]
             d = row[1]
             names.append(n)
-            data = str(d).split()[0]
+            data = str(d).split(",")[0].strip().replace(" ","_")
             searchData.append(data)
 
 
@@ -48,6 +54,7 @@ def markerSingleFunc(table):
         SQLmarkerData = f'SELECT id,"addressFrom", "addressTo" FROM "{table}";'
 
         cursor.execute(SQLmarkerData)
+        print(SQLmarkerData)
         results = cursor.fetchall()
         names = []
         searchData1 = []
@@ -59,8 +66,7 @@ def markerSingleFunc(table):
             names.append(n)
             data1 = str(sd1).split()[0]
             data2 = str(sd2).split()[0]
-            print(data1)
-            print(data2)
+
             searchData1.append(data1)
             searchData2.append(data2)
 
@@ -70,32 +76,28 @@ def markerSingleFunc(table):
         from library.gui import Map
 
         for coords1, coords2 in zip(coordinatesFrom, coordinatesTo):
-            marker1 = Map.set_marker(coords1[0], coords1[1], marker_color_circle="darkred", marker_color_outside="red")
-            if coordinatesFrom == (0,0):
-                marker1.hide()
-                markers.append(marker2)
-            marker2 = Map.set_marker(coords2[0], coords2[1], marker_color_circle="#2ca30b", marker_color_outside="#6ad44c")
-            if coordinatesTo == (0, 0):
-                marker2.hide()
+
+            if coords1 != (0,0):
+                marker1 = Map.set_marker(coords1[0], coords1[1], marker_color_circle="darkred",
+                                         marker_color_outside="red")
+                markers.append(marker1)
+
+            if coords2 != (0, 0):
+                marker2 = Map.set_marker(coords2[0], coords2[1], marker_color_circle="#2ca30b", marker_color_outside="#6ad44c")
                 markers.append(marker2)
 
         for name, coords1, coords2 in zip(names, coordinatesFrom, coordinatesTo):
-            path = Map.set_path(
-                position_list = [coords1, coords2],
-                name = f"Trasa id: {name}",
-                width = 3,
-                color="red")
-            if coordinatesFrom == (0, 0) or coordinatesTo == (0, 0):
-                path.hide()
-            paths.append(path)
+            if coords1 != (0, 0) and coords2 != (0, 0):
+                path = Map.set_path(
+                    position_list=[coords1, coords2],
+                    name=f"Trasa id: {name}",
+                    width=3,
+                    color="red")
+                paths.append(path)
 
-    for m in markers:
-        print(m.text)
     conn.close()
 
-#TODO dodać obsługę dodawania dystansu na podstawie markerów????
 #TODO dodać obsługę markerów dla tabel z warunkami
-#TODO dodać zoom przy naciśnięciu dwukrotnym na skróconą tabelę w GUI
 def scrapFunc(searchData):
     import requests
     from bs4 import BeautifulSoup
@@ -111,16 +113,17 @@ def scrapFunc(searchData):
         url: str = f"https://pl.wikipedia.org/wiki/{data}"
         response = requests.get(url, headers=naglowek)
         response_html = BeautifulSoup(response.text, "html.parser")
-        # print(response_html.prettify())
+
         latitude = response_html.select('.latitude')
         longitude = response_html.select('.longitude')
         if len(latitude) > 1 and len(longitude) > 1:
             latitude = float(latitude[1].text.replace(",", "."))
             longitude = float(longitude[1].text.replace(",", "."))
             coordinates.append((latitude, longitude))
+            print(f"Latitude: {latitude}, Longitude: {longitude}")
         else:
             print("Błąd w markerze!")
             coordinates.append((0,0))
-    print(f"Latitude: {latitude}, Longitude: {longitude}")
+
 
     return coordinates
