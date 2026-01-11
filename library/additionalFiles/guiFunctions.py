@@ -5,7 +5,8 @@ def removeCursorSelection(listbox):
             listbox.after(1, lambda: listbox.selection_clear(0))
 
 
-    listbox.bind("<<ListboxSelect>>", deselect)
+    listbox.bind("<<ListboxSelect>>", deselect, add="+")
+
 
 def clearListbox(listbox):
     listbox.delete(0, "end")
@@ -21,6 +22,7 @@ def selectedTableFunc(param, button):
     global selectedTableValue
     global lastButtonClicked
     global simpleSQLGenVal
+
 
     currentBackgroundColor = button.cget("bg")
 
@@ -49,5 +51,11 @@ def selectedTableFunc(param, button):
             simpleSQLGenVal = "deliveries"
         case "pracownicy-w-sklepie":
             selectedTableValue = "pracownicy-w-sklepie"
+            simpleSQLGenVal = "pracownicy-w-sklepie"
         case "dostawcy-w-sklepie":
             selectedTableValue = "dostawcy-w-sklepie"
+            simpleSQLGenVal = "dostawcy-w-sklepie"
+
+    from library import gui
+    gui.Map.set_position(52.20, 19.03)
+    gui.Map.set_zoom(6)
