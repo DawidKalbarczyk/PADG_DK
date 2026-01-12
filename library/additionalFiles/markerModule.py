@@ -42,7 +42,7 @@ def markerSingleFunc(table, condition=None):
             searchData.append(data)
 
 
-        coordinates = scrapFunc(searchData)
+        coordinates = multiProcessingScrapFunc(searchData)
 
         from library.gui import Map
         for name,coords in zip(names, coordinates):
@@ -70,8 +70,8 @@ def markerSingleFunc(table, condition=None):
             searchData1.append(data1)
             searchData2.append(data2)
 
-        coordinatesFrom = scrapFunc(searchData1)
-        coordinatesTo = scrapFunc(searchData2)
+        coordinatesFrom = multiProcessingScrapFunc(searchData1)
+        coordinatesTo = multiProcessingScrapFunc(searchData2)
 
         from library.gui import Map
 
@@ -98,7 +98,13 @@ def markerSingleFunc(table, condition=None):
     conn.close()
 
 #TODO dodać obsługę markerów dla tabel z warunkami
-def scrapFunc(searchData):
+
+def multiProcessingScrapFunc(searchData):
+    import multiprocessing as mp
+    with mp.Pool(processes=mp.cpu_count()) as pool:
+        coordinates = pool.map(scrapFunc, searchData)
+    return coordinates
+def scrapFunc(data):
     import requests
     from bs4 import BeautifulSoup
 
@@ -108,22 +114,17 @@ def scrapFunc(searchData):
                       "Chrome/120.0 Safari/537.36 "
                       "(+https://twojastrona.pl/contact)"
     }
-    coordinates = []
-    for data in searchData:
-        url: str = f"https://pl.wikipedia.org/wiki/{data}"
-        response = requests.get(url, headers=naglowek)
-        response_html = BeautifulSoup(response.text, "html.parser")
+    url: str = f"https://pl.wikipedia.org/wiki/{data}"
+    response = requests.get(url, headers=naglowek)
+    response_html = BeautifulSoup(response.text, "html.parser")
 
-        latitude = response_html.select('.latitude')
-        longitude = response_html.select('.longitude')
-        if len(latitude) > 1 and len(longitude) > 1:
-            latitude = float(latitude[1].text.replace(",", "."))
-            longitude = float(longitude[1].text.replace(",", "."))
-            coordinates.append((latitude, longitude))
-            print(f"Latitude: {latitude}, Longitude: {longitude}")
-        else:
-            print("Błąd w markerze!")
-            coordinates.append((0,0))
+    latitude = response_html.select('.latitude')
+    longitude = response_html.select('.longitude')
+    if len(latitude) > 1 and len(longitude) > 1:
+        latitude = float(latitude[1].text.replace(",", "."))
+        longitude = float(longitude[1].text.replace(",", "."))
+        return (latitude, longitude)
+    else:
+        print("Błąd w markerze!")
+        return (0,0)
 
-
-    return coordinates
